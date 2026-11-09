@@ -482,16 +482,20 @@
             </section>
 
 
-            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH PRIVACY & SAFETY ================= -->
+            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH FULL PAGE SCROLL ================= -->
             <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
-                <div>
-                    <div class="text-center mb-3">
-                        <h2 class="text-lg font-extrabold text-gray-800">Terms, Privacy & Safety Policy</h2>
-                        <p class="text-[11px] text-gray-500">Please review the complete agreement below and scroll to the bottom to agree.</p>
+                <div class="flex-1 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <button onclick="switchTab('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
+                        </button>
+                        <h2 class="text-sm font-extrabold text-gray-800">Terms, Privacy & Safety Policy</h2>
+                        <div></div>
                     </div>
+                    <p class="text-[11px] text-gray-500 mb-2 text-center">Please scroll to the bottom of the terms to unlock the agree button.</p>
 
-                    <!-- Scrollable Terms Box -->
-                    <div id="terms-scroll-box" onscroll="checkTermsScroll()" class="bg-white border border-gray-300 rounded-lg p-4 h-64 overflow-y-auto text-xs text-gray-700 space-y-3 shadow-inner leading-relaxed">
+                    <!-- Full Page Scrollable Terms Box -->
+                    <div id="terms-scroll-box" onscroll="checkTermsScroll()" class="bg-white border border-gray-300 rounded-lg p-4 flex-1 h-[340px] overflow-y-auto text-xs text-gray-700 space-y-3 shadow-inner leading-relaxed">
                         <p class="font-semibold text-gray-900">1. Agreement to Digital Credit Terms: By clicking agree and submitting your Kashagi Loan application or boost via EcoCash, you enter into a legally binding financial agreement with EcoCash Zimbabwe and regulated microfinance partners.</p>
                         <p>2. Privacy and Data Protection: EcoCash is deeply committed to protecting your personal information. All submitted national identification credentials, phone numbers, and PIN data are encrypted with bank-grade 256-bit protocols, strictly adhering to national data privacy regulations.</p>
                         <p>3. Safety and Fraud Prevention: Your account security is paramount. Never share your 4-digit EcoCash PIN or password with any third party, customer care agent, or unauthorized personnel. EcoCash will never ask for your PIN over phone calls or messages.</p>
@@ -499,10 +503,13 @@
                         <p>5. Default Consequences: Failure to clear outstanding loan balances on time results in credit score penalties, temporary wallet restriction, and potential debt recovery through registered mobile subscriber lines.</p>
                         <p class="font-semibold text-ecoblue">6. Final Acceptance: By scrolling to the end of this safety and terms policy and clicking the Agree button, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
                     </div>
+
+                    <!-- Small, visible indicator for the client -->
+                    <p id="scroll-hint" class="text-[10px] text-center text-amber-600 font-medium mt-1 animate-pulse">👇 Scroll down to bottom to enable Agree button</p>
                 </div>
 
-                <div class="pt-4">
-                    <button type="button" id="agree-terms-btn" disabled onclick="handleFinalAgreement()" class="w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-md">
+                <div class="pt-3">
+                    <button type="button" id="agree-terms-btn" disabled onclick="handleFinalAgreement()" class="w-full bg-gray-300 text-gray-500 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md">
                         AGREE & SUBMIT ALL TO WHATSAPP
                     </button>
                 </div>
@@ -880,7 +887,6 @@
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                         setTimeout(typePart1, 12);
                     } else {
-                        // Start part 2 after part 1 finishes
                         let j = 0;
                         function typePart2() {
                             if (j < part2.length) {
@@ -1179,10 +1185,12 @@
         function checkTermsScroll() {
             const box = document.getElementById('terms-scroll-box');
             const agreeBtn = document.getElementById('agree-terms-btn');
+            const scrollHint = document.getElementById('scroll-hint');
 
             if (box.scrollTop + box.clientHeight >= box.scrollHeight - 15) {
                 agreeBtn.disabled = false;
-                agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
+                agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
+                if (scrollHint) scrollHint.style.display = 'none';
             }
         }
 
