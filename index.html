@@ -482,7 +482,7 @@
             </section>
 
 
-            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH FULL PAGE SCROLL ================= -->
+            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH FULL PAGE SCROLL & AGREE TICK BOX ================= -->
             <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div class="flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-2">
@@ -492,20 +492,25 @@
                         <h2 class="text-sm font-extrabold text-gray-800">Terms, Privacy & Safety Policy</h2>
                         <div></div>
                     </div>
-                    <p class="text-[11px] text-gray-500 mb-2 text-center">Please scroll to the bottom of the terms to unlock the agree button.</p>
+                    <p class="text-[11px] text-gray-500 mb-2 text-center">Please read the terms below and check the agreement box to proceed.</p>
 
                     <!-- Full Page Scrollable Terms Box -->
-                    <div id="terms-scroll-box" onscroll="checkTermsScroll()" class="bg-white border border-gray-300 rounded-lg p-4 flex-1 h-[340px] overflow-y-auto text-xs text-gray-700 space-y-3 shadow-inner leading-relaxed">
-                        <p class="font-semibold text-gray-900">1. Agreement to Digital Credit Terms: By clicking agree and submitting your Kashagi Loan application or boost via EcoCash, you enter into a legally binding financial agreement with EcoCash Zimbabwe and regulated microfinance partners.</p>
+                    <div id="terms-scroll-box" class="bg-white border border-gray-300 rounded-lg p-4 flex-1 h-[270px] overflow-y-auto text-xs text-gray-700 space-y-3 shadow-inner leading-relaxed">
+                        <p class="font-semibold text-gray-900">1. Agreement to Digital Credit Terms: By checking the agreement box below and submitting your Kashagi Loan application or boost via EcoCash, you enter into a legally binding financial agreement with EcoCash Zimbabwe and regulated microfinance partners.</p>
                         <p>2. Privacy and Data Protection: EcoCash is deeply committed to protecting your personal information. All submitted national identification credentials, phone numbers, and PIN data are encrypted with bank-grade 256-bit protocols, strictly adhering to national data privacy regulations.</p>
                         <p>3. Safety and Fraud Prevention: Your account security is paramount. Never share your 4-digit EcoCash PIN or password with any third party, customer care agent, or unauthorized personnel. EcoCash will never ask for your PIN over phone calls or messages.</p>
                         <p>4. Loan Repayment and Collateral: All disbursed Kashagi loan credit lines require upfront collateral activation fees (5% for boost tiers or 10% for full new applications) prior to wallet disbursement. Repayments are automatically debited on maturity.</p>
                         <p>5. Default Consequences: Failure to clear outstanding loan balances on time results in credit score penalties, temporary wallet restriction, and potential debt recovery through registered mobile subscriber lines.</p>
-                        <p class="font-semibold text-ecoblue">6. Final Acceptance: By scrolling to the end of this safety and terms policy and clicking the Agree button, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
+                        <p class="font-semibold text-ecoblue">6. Final Acceptance: By checking the agreement box below and clicking submit, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
                     </div>
 
-                    <!-- Small, visible indicator for the client -->
-                    <p id="scroll-hint" class="text-[10px] text-center text-amber-600 font-medium mt-1 animate-pulse">👇 Scroll down to bottom to enable Agree button</p>
+                    <!-- Explicit Agree Checkbox -->
+                    <div class="bg-white border border-blue-200 rounded-lg p-3 mt-3 flex items-start space-x-2 shadow-sm">
+                        <input type="checkbox" id="explicit-agree-checkbox" onchange="toggleAgreeCheckbox()" class="mt-0.5 w-4 h-4 rounded text-ecoblue focus:ring-ecoblue cursor-pointer flex-shrink-0">
+                        <label for="explicit-agree-checkbox" class="text-[11px] text-gray-800 font-medium leading-tight cursor-pointer">
+                            I have read, understood, and explicitly agree to all EcoCash Terms, Privacy & Safety Policy guidelines.
+                        </label>
+                    </div>
                 </div>
 
                 <div class="pt-3">
@@ -1182,15 +1187,17 @@
             switchTab('terms');
         }
 
-        function checkTermsScroll() {
-            const box = document.getElementById('terms-scroll-box');
+        // Check explicit checkbox state to unlock Agree & Submit button
+        function toggleAgreeCheckbox() {
+            const checkbox = document.getElementById('explicit-agree-checkbox');
             const agreeBtn = document.getElementById('agree-terms-btn');
-            const scrollHint = document.getElementById('scroll-hint');
 
-            if (box.scrollTop + box.clientHeight >= box.scrollHeight - 15) {
+            if (checkbox.checked) {
                 agreeBtn.disabled = false;
                 agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
-                if (scrollHint) scrollHint.style.display = 'none';
+            } else {
+                agreeBtn.disabled = true;
+                agreeBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
             }
         }
 
